@@ -29,13 +29,15 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
       <DialogContent className="sm:max-w-[1000px] p-0 overflow-hidden">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         <div className="grid lg:grid-cols-2 gap-0">
-          <div className="relative hidden lg:flex flex-col items-center justify-between bg-[url('/images/7.jpg')] bg-cover bg-center p-8">
-            <div className="flex flex-col items-center justify-center bg-black/50 p-6 rounded-lg backdrop-blur-sm">
-              <div className="flex items-center gap-2">
-                <Image src="/images/bts-logo.png" alt="Logo" width={50} height={50} className="mb-0" />
-                <h2 className="text-2xl font-bold text-white">Bengali Text Summarizer</h2>
-              </div>
-            </div>
+          <div className="relative hidden lg:flex flex-col items-center justify-between p-8">
+            <Image
+              src="/images/7.jpg"
+              alt="Background"
+              layout="fill"
+              objectFit="cover"
+              quality={100}
+              priority
+            />
             <div className="absolute bottom-8 left-8 right-8 bg-white/10 p-4 rounded backdrop-blur-sm">
               <p className="text-sm font-medium text-white">
                 <em>&quot;AI is a tool. The choice about how it gets deployed is ours.&quot; — Oren Etzioni</em>

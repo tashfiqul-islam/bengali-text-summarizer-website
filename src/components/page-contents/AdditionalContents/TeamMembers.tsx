@@ -17,7 +17,7 @@ export default function TeamMembers() {
       <CardHeader className="bg-gradient-to-r from-[#348f50] to-[#56b4d3] text-white">
         <CardTitle className="text-2xl font-bold">Group Overview</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-5">
+      <CardContent className="space-y-4">
         <div className="flex flex-wrap gap-4 pt-4">
           <Badge variant="secondary" className="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100">
             <BookOpen className="h-4 w-4" />
