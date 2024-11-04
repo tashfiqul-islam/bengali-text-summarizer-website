@@ -5,7 +5,7 @@ import SummaryGenerator from '@/components/page-contents/SummaryGenerator/Summar
 
 export default function Home() {
   return (
-    <main className="flex-1 container mx-auto px-4 py-2">
+    <main className="flex-1 container mx-auto px-4 py-2" aria-label="Bengali Text Summarizer Main Content">
       <SummaryGenerator />
 
       <div className="grid md:grid-cols-[2fr_1fr] gap-8 mt-10">

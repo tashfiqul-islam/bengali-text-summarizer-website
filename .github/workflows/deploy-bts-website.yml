@@ -92,6 +92,9 @@ jobs:
         echo "Visit https://${{ github.repository_owner }}.github.io/bengali-text-summarizer to see the live site."
 
     # Performance and security checks
+    - name: Wait for deployment
+      run: sleep 60
+
     - name: Run Lighthouse CI
       uses: treosh/lighthouse-ci-action@v10
       with:
@@ -99,3 +102,5 @@ jobs:
           https://${{ github.repository_owner }}.github.io/bengali-text-summarizer
         uploadArtifacts: true
         temporaryPublicStorage: true
+        runs: 3
+        configPath: './lighthouserc.json'

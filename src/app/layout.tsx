@@ -26,7 +26,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         <ThemeProvider defaultTheme="system" storageKey="bts-theme">
           <div className="min-h-screen flex flex-col">
             <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md">
