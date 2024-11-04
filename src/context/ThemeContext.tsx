@@ -37,11 +37,51 @@ export function ThemeProvider({
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
       root.classList.add(systemTheme)
-      return
+      applyTheme(systemTheme)
+    } else {
+      root.classList.add(theme)
+      applyTheme(theme)
+    }
+  }, [theme])
+
+  const applyTheme = (currentTheme: 'light' | 'dark') => {
+    const root = window.document.documentElement
+    const isDark = currentTheme === 'dark'
+
+    const variables = {
+      '--background': isDark ? '222.2 84% 4.9%' : '0 0% 100%',
+      '--foreground': isDark ? '210 40% 98%' : '222.2 84% 4.9%',
+      '--card': isDark ? '222.2 84% 4.9%' : '0 0% 100%',
+      '--card-foreground': isDark ? '210 40% 98%' : '222.2 84% 4.9%',
+      '--popover': isDark ? '222.2 84% 4.9%' : '0 0% 100%',
+      '--popover-foreground': isDark ? '210 40% 98%' : '222.2 84% 4.9%',
+      '--primary': isDark ? '210 40% 98%' : '222.2 47.4% 11.2%',
+      '--primary-foreground': isDark ? '222.2 47.4% 11.2%' : '210 40% 98%',
+      '--secondary': isDark ? '217.2 32.6% 17.5%' : '210 40% 96.1%',
+      '--secondary-foreground': isDark ? '210 40% 98%' : '222.2 47.4% 11.2%',
+      '--muted': isDark ? '217.2 32.6% 17.5%' : '210 40% 96.1%',
+      '--muted-foreground': isDark ? '215 20.2% 65.1%' : '215.4 16.3% 46.9%',
+      '--accent': isDark ? '217.2 32.6% 17.5%' : '210 40% 96.1%',
+      '--accent-foreground': isDark ? '210 40% 98%' : '222.2 47.4% 11.2%',
+      '--destructive': isDark ? '0 62.8% 30.6%' : '0 84.2% 60.2%',
+      '--destructive-foreground': isDark ? '210 40% 98%' : '210 40% 98%',
+      '--border': isDark ? '217.2 32.6% 17.5%' : '214.3 31.8% 91.4%',
+      '--input': isDark ? '217.2 32.6% 17.5%' : '214.3 31.8% 91.4%',
+      '--ring': isDark ? '212.7 26.8% 83.9%' : '222.2 84% 4.9%',
+      '--sidebar-background': isDark ? '240 5.9% 10%' : '0 0% 98%',
+      '--sidebar-foreground': isDark ? '240 4.8% 95.9%' : '240 5.3% 26.1%',
+      '--sidebar-primary': isDark ? '224.3 76.3% 48%' : '240 5.9% 10%',
+      '--sidebar-primary-foreground': isDark ? '0 0% 100%' : '0 0% 98%',
+      '--sidebar-accent': isDark ? '240 3.7% 15.9%' : '240 4.8% 95.9%',
+      '--sidebar-accent-foreground': isDark ? '240 4.8% 95.9%' : '240 5.9% 10%',
+      '--sidebar-border': isDark ? '240 3.7% 15.9%' : '220 13% 91%',
+      '--sidebar-ring': '217.2 91.2% 59.8%',
     }
 
-    root.classList.add(theme)
-  }, [theme])
+    Object.entries(variables).forEach(([property, value]) => {
+      root.style.setProperty(property, value)
+    })
+  }
 
   const value = {
     theme,

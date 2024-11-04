@@ -4,19 +4,21 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from '@/context/ThemeContext'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Github } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar"
-import AuthDialog from '../contents/AuthDialog'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import AuthDialog from '../page-contents/AdditionalContents/AuthDialog'
 
 export default function NavigationBar() {
   const { theme, setTheme } = useTheme()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [showAuthDialog, setShowAuthDialog] = useState(false)
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
 
-  const handleAuth = () => {
+  const handleAuth = (mode: 'login' | 'register') => {
+    setAuthMode(mode)
     setShowAuthDialog(true)
   }
 
@@ -24,14 +26,46 @@ export default function NavigationBar() {
     setIsLoggedIn(false)
   }
 
+  const handleLogoClick = () => {
+    window.location.reload()
+  }
+
   return (
     <>
       <nav className="border-b px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Image src="/images/bts-logo.png" alt="Logo" width={35} height={35} />
+        <div 
+          className="flex items-center gap-2 cursor-pointer" 
+          onClick={handleLogoClick}
+        >
+          <Image src="/images/bts-logo.png" alt="Logo" width={100} height={100} />
           <span className="font-semibold text-lg">Bengali Text Summarizer</span>
         </div>
         <div className="flex items-center gap-4">
+          <HoverCard>
+            <HoverCardTrigger asChild>
+              <Link 
+                href="https://github.com/tashfiqul-islam/bengali-text-summarizer-website" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <Button variant="ghost" size="icon" className="relative h-8 w-8 rounded-full">
+                  <Github className="h-4 w-4" />
+                  <span className="sr-only">GitHub Repository</span>
+                </Button>
+              </Link>
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80">
+              <div className="flex justify-between space-x-4">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-semibold">GitHub Repository</h4>
+                  <p className="text-sm text-muted-foreground">
+                    View the source code for Bengali Text Summarizer
+                  </p>
+                </div>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+
           <Button
             variant="ghost"
             size="icon"
@@ -47,7 +81,6 @@ export default function NavigationBar() {
           </Button>
 
           <DropdownMenu>
-            
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
@@ -63,10 +96,10 @@ export default function NavigationBar() {
                 </DropdownMenuItem>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={handleAuth}>
-                    Sign In
+                  <DropdownMenuItem onClick={() => handleAuth('login')}>
+                    Login
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleAuth}>
+                  <DropdownMenuItem onClick={() => handleAuth('register')}>
                     Register
                   </DropdownMenuItem>
                 </>
@@ -80,6 +113,7 @@ export default function NavigationBar() {
         isOpen={showAuthDialog} 
         onClose={() => setShowAuthDialog(false)}
         onLogin={() => setIsLoggedIn(true)}
+        initialMode={authMode}
       />
     </>
   )
