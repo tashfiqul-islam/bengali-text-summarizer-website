@@ -38,7 +38,7 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
             </div>
             <div className="absolute bottom-8 left-8 right-8 bg-white/10 p-4 rounded backdrop-blur-sm">
               <p className="text-sm font-medium text-white">
-                <em>"AI is a tool. The choice about how it gets deployed is ours." — Oren Etzioni</em>
+                <em>&quot;AI is a tool. The choice about how it gets deployed is ours.&quot; — Oren Etzioni</em>
               </p>
             </div>
           </div>

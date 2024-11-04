@@ -27,7 +27,6 @@ interface MainContentProps {
 }
 
 export default function MainContent({
-  isSidebarCollapsed,
   toggleSidebar,
   currentSection,
   selectedArticle,

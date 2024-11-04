@@ -1,4 +1,3 @@
-import ArticleHub from '@/components/page-contents/SummaryGenerator/SummaryGenerator'
 import FacultyAdvisor from '@/components/page-contents/AdditionalContents/FacultyAdvisor'
 import TeamMembers from '@/components/page-contents/AdditionalContents/TeamMembers'
 import ProjectOverview from '@/components/page-contents/AdditionalContents/ProjectOverview'

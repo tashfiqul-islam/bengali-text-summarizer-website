@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Cpu, Database, BarChart, FileText, Layers } from "lucide-react"
+import { Cpu, BarChart, FileText, Layers } from "lucide-react"
 
 export default function ProjectOverview() {
   return (

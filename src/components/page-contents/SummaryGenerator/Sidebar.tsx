@@ -19,7 +19,6 @@ export default function Sidebar({
   handleEnterOwn,
   handleSelectArticle,
   toggleCategory,
-  toggleSidebar,
 }: SidebarProps) {
   return (
     <div

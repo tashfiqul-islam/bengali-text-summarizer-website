@@ -1,5 +1,6 @@
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Users, Hash } from "lucide-react";
 
@@ -35,7 +36,13 @@ export default function TeamMembers() {
           {teamMembers.map((member) => (
             <div key={member.id} className="flex items-center gap-5 bg-emerald-50 dark:bg-emerald-900/20 backdrop-filter backdrop-blur-sm p-4 rounded-lg shadow-md">
               <Avatar className="h-16 w-16 ring-2 ring-[#348f50] dark:ring-[#56b4d3] ring-offset-2 ring-offset-background">
-                <AvatarImage src={`/images/${member.avatar}`} alt={member.name} />
+                <Image
+                  src={`/images/${member.avatar}`}
+                  alt={member.name}
+                  width={64}
+                  height={64}
+                  className="rounded-full object-cover"
+                />
                 <AvatarFallback>{member.name[0]}</AvatarFallback>
               </Avatar>
               <div>

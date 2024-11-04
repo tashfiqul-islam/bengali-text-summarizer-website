@@ -1,3 +1,4 @@
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/context/ThemeContext'
 import NavigationBar from '@/components/layout/NavigationBar'
@@ -6,12 +7,16 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Bengali Text Summarizer',
   description: 'A Machine Learning project using NLP for Bengali text summarization',
   keywords: 'Bengali, Text Summarization, NLP, Machine Learning',
-  author: 'Your Team Name',
-  viewport: 'width=device-width, initial-scale=1',
+  authors: [{ name: 'Group 1' }],
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 interface RootLayoutProps {
