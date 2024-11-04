@@ -8,7 +8,7 @@ export default function Home() {
     <main className="flex-1 container mx-auto px-4 py-2">
       <SummaryGenerator />
 
-      <div className="grid md:grid-cols-[2fr_1fr] gap-8 mt-12">
+      <div className="grid md:grid-cols-[2fr_1fr] gap-8 mt-10">
         <div className="space-y-8">
           <ProjectOverview />
           <FacultyAdvisor />

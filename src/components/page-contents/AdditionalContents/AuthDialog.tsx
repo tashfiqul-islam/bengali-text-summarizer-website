@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getImagePath } from '@/lib/utils';
 
 type AuthDialogProps = {
   isOpen: boolean;
@@ -31,7 +32,7 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
         <div className="grid lg:grid-cols-2 gap-0">
           <div className="relative hidden lg:flex flex-col items-center justify-between p-8">
             <Image
-              src="/images/7.jpg"
+              src={getImagePath('7.jpg')}
               alt="Background"
               layout="fill"
               objectFit="cover"

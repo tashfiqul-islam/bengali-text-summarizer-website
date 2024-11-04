@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Cpu, BarChart, FileText, Layers } from "lucide-react"
+import { Cpu, FileText, Layers, LineChart } from "lucide-react"
 
 export default function ProjectOverview() {
   return (
-    <Card className="overflow-hidden bg-white/10 dark:bg-gray-800/10 backdrop-filter backdrop-blur-lg shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <Card className="overflow-hidden bg-white/10 dark:bg-gray-800/10 backdrop-filter backdrop-blur-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
       <CardHeader className="bg-gradient-to-r from-blue-500/80 to-purple-600/80 text-white">
         <CardTitle className="text-2xl font-bold">Project Overview</CardTitle>
       </CardHeader>
@@ -14,7 +14,7 @@ export default function ProjectOverview() {
           <ProjectDetail icon={<Layers className="h-5 w-5" />} title="Model Architecture" value="Seq2Seq" />
           <ProjectDetail icon={<Cpu className="h-5 w-5" />} title="Pre-trained Model" value="Google/mt5-small" />
           <ProjectDetail icon={<FileText className="h-5 w-5" />} title="Tokenizer" value="MT5Tokenizer" />
-          <ProjectDetail icon={<BarChart className="h-5 w-5" />} title="Evaluation Metrics" value="ROUGE-N, BLEU Score" />
+          <ProjectDetail icon={<LineChart className="h-5 w-5" />} title="Evaluation Metrics" value="ROUGE-N, BLEU Score" />
         </div>
       </CardContent>
     </Card>
@@ -23,8 +23,8 @@ export default function ProjectOverview() {
 
 function ProjectDetail({ icon, title, value }: { icon: React.ReactNode, title: string, value: string }) {
   return (
-    <div className="flex items-start space-x-3 bg-white/5 dark:bg-gray-700/5 backdrop-filter backdrop-blur-sm p-3 rounded-lg shadow-md">
-      <div className="bg-primary/20 rounded-full p-2">
+    <div className="flex items-start space-x-3 bg-white/5 dark:bg-gray-700/5 backdrop-filter backdrop-blur-sm p-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] hover:bg-white/10 dark:hover:bg-gray-700/10">
+      <div className="bg-primary/20 rounded-full p-2 transition-all duration-300 group-hover:bg-primary/30">
         {icon}
       </div>
       <div>

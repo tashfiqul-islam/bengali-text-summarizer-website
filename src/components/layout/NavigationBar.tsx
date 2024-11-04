@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import AuthDialog from '../page-contents/AdditionalContents/AuthDialog'
+import { getImagePath } from '@/lib/utils'
 
 export default function NavigationBar() {
   const { theme, setTheme } = useTheme()
@@ -37,7 +38,7 @@ export default function NavigationBar() {
           className="flex items-center gap-2 cursor-pointer" 
           onClick={handleLogoClick}
         >
-          <Image src="/images/bts-logo.png" alt="Logo" width={40} height={40} />
+          <Image src={getImagePath('bts-logo.png')} alt="Logo" width={40} height={40} />
           <span className="font-semibold text-lg">Bengali Text Summarizer</span>
         </div>
         <div className="flex items-center gap-4">
@@ -84,7 +85,7 @@ export default function NavigationBar() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="/images/profile-avatar.png" alt="User avatar" />
+                  <AvatarImage src={getImagePath('profile-avatar.png')} alt="User avatar" />
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
               </Button>
