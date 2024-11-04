@@ -15,6 +15,12 @@ on:
 env:
   NODE_VERSION: '20'
 
+permissions:
+  contents: write
+  pages: write
+  deployments: write
+  actions: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -61,21 +67,21 @@ jobs:
         branch: gh-pages
         folder: out
         clean: true
-        token: ${{ secrets.GH_PAT }}  
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     # Post-deployment
     - name: Create deployment
       uses: chrnorm/deployment-action@v2
       id: deployment
       with:
-        token: "${{ secrets.GH_PAT }}"  
+        token: "${{ secrets.GITHUB_TOKEN }}"
         environment: ${{ github.event.inputs.environment }}
         initial-status: "success"
 
     - name: Update deployment status
       uses: chrnorm/deployment-status@v2
       with:
-        token: "${{ secrets.GH_PAT }}" 
+        token: "${{ secrets.GITHUB_TOKEN }}"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
         state: "success"
 
