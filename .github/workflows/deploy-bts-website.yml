@@ -1,0 +1,97 @@
+name: Deploy bts-website
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Website Deployment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Preparation
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    # Caching
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-
+
+    # Build
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+      env:
+        NEXT_PUBLIC_BASE_PATH: /bengali-text-summarizer
+        NODE_ENV: ${{ github.event.inputs.environment }}
+
+    - name: Export static files
+      run: npm run export
+
+    # Pre-deployment
+    - name: Add .nojekyll file
+      run: touch out/.nojekyll
+
+    # Deployment
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: out
+        clean: true
+
+    # Post-deployment
+    - name: Create deployment
+      uses: chrnorm/deployment-action@v2
+      id: deployment
+      with:
+        token: "${{ github.token }}"
+        environment: ${{ github.event.inputs.environment }}
+        initial-status: "success"
+
+    - name: Update deployment status
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: "${{ github.token }}"
+        deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+        state: "success"
+
+    - name: Post-deployment notification
+      if: success()
+      run: |
+        echo "🚀 Deployment successful!"
+        echo "Visit https://${{ github.repository_owner }}.github.io/bengali-text-summarizer to see the live site."
+
+    # Performance and security checks
+    - name: Run Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v12
+      with:
+        urls: |
+          https://${{ github.repository_owner }}.github.io/bengali-text-summarizer
+        uploadArtifacts: true
+        temporaryPublicStorage: true
