@@ -10,8 +10,8 @@
     "lint": "next lint"
   },
   "overrides": {
-    "@types/react": "npm:types-react@rc",
-    "@types/react-dom": "npm:types-react-dom@rc"
+    "react": "$react",
+    "react-dom": "$react-dom"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
@@ -41,8 +41,8 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "npm:types-react@rc",
-    "@types/react-dom": "npm:types-react-dom@rc",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
     "postcss": "^8",

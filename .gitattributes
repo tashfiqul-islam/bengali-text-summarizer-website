@@ -10,6 +10,10 @@
 # in Unix via a file share from Windows, the scripts will work.
 *.sh text eol=lf
 
+# npm specific files
+package.json text eol=lf
+package-lock.json text eol=lf
+
 # Archives
 *.7z binary
 *.gz binary
