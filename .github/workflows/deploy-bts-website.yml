@@ -61,20 +61,21 @@ jobs:
         branch: gh-pages
         folder: out
         clean: true
+        token: ${{ secrets.GH_PAT }}  
 
     # Post-deployment
     - name: Create deployment
       uses: chrnorm/deployment-action@v2
       id: deployment
       with:
-        token: "${{ github.token }}"
+        token: "${{ secrets.GH_PAT }}"  
         environment: ${{ github.event.inputs.environment }}
         initial-status: "success"
 
     - name: Update deployment status
       uses: chrnorm/deployment-status@v2
       with:
-        token: "${{ github.token }}"
+        token: "${{ secrets.GH_PAT }}" 
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
         state: "success"
 
