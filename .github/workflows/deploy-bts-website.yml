@@ -1,106 +1,53 @@
-name: Deploy bts-website
+name: Deploy Bengali Text Summarizer
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'production'
-        type: choice
-        options:
-        - production
-        - staging
+  workflow_dispatch:  # Allows manual triggering of the workflow
 
-env:
-  NODE_VERSION: '20'
-
+# Define the required permissions for GitHub Actions
 permissions:
-  contents: write
+  contents: read
   pages: write
-  deployments: write
-  actions: write
+  id-token: write
+
+# Ensure only one deployment workflow runs at a time
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    # Preparation
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'  # Enables caching of npm dependencies
 
-    # Caching
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.npm
-        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-node-
+      - name: Install dependencies
+        run: npm ci
 
-    # Build
-    - name: Install dependencies
-      run: npm ci
+      - name: Build with Next.js
+        run: npm run build
+        env:
+          # Set the base path for asset references in the build
+          NEXT_PUBLIC_BASE_PATH: '/bengali-text-summarizer'
 
-    - name: Build project
-      run: npm run build
-      env:
-        NEXT_PUBLIC_BASE_PATH: ${{ github.event.inputs.environment == 'production' && '/bengali-text-summarizer' || '' }}
-        NODE_ENV: ${{ github.event.inputs.environment }}
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out  # Directory containing the built static files
 
-    # Pre-deployment
-    - name: Add .nojekyll file
-      run: touch out/.nojekyll
-
-    # Deployment
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages
-        folder: out
-        clean: true
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-    # Post-deployment
-    - name: Create deployment
-      uses: chrnorm/deployment-action@v2
-      id: deployment
-      with:
-        token: "${{ secrets.GITHUB_TOKEN }}"
-        environment: ${{ github.event.inputs.environment }}
-        initial-status: "success"
-
-    - name: Update deployment status
-      uses: chrnorm/deployment-status@v2
-      with:
-        token: "${{ secrets.GITHUB_TOKEN }}"
-        deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-        state: "success"
-
-    - name: Post-deployment notification
-      if: success()
-      run: |
-        echo "🚀 Deployment successful!"
-        echo "Visit https://${{ github.repository_owner }}.github.io/bengali-text-summarizer to see the live site."
-
-    # Performance and security checks
-    - name: Wait for deployment
-      run: sleep 60
-
-    - name: Run Lighthouse CI
-      uses: treosh/lighthouse-ci-action@v10
-      with:
-        urls: |
-          https://${{ github.repository_owner }}.github.io/bengali-text-summarizer
-        uploadArtifacts: true
-        temporaryPublicStorage: true
-        runs: 3
-        configPath: './lighthouserc.json'
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build  # Ensures the build job completes before deploying
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
