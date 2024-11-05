@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { Card } from "@/components/ui/card";
 import { UserCircle2, GraduationCap, MapPin, NotebookPen, Building } from "lucide-react";
-import imageLoader from '@/lib/imageLoader';
 
 export default function FacultyAdvisor() {
   return (
@@ -18,7 +17,6 @@ export default function FacultyAdvisor() {
           <div className="relative w-24 h-24 flex-shrink-0">
             <div className="absolute inset-0 rounded-full ring-4 ring-white/20 overflow-hidden shadow-md">
               <Image
-                loader={imageLoader}
                 src="/images/faculty/nafisa.jpg"
                 alt="Dr. Nafisa Noor"
                 fill
