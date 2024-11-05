@@ -38,7 +38,7 @@ export default function NavigationBar() {
           className="flex items-center gap-2 cursor-pointer" 
           onClick={handleLogoClick}
         >
-          <Image src="/images/bts-logo,png" alt="Logo" width={40} height={40} />
+          <Image src="/images/bts-logo.png" alt="Logo" width={40} height={40} />
           <span className="font-semibold text-lg">Bengali Text Summarizer</span>
         </div>
         <div className="flex items-center gap-4">
