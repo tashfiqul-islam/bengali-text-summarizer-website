@@ -1,6 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { BookOpen, Users, Hash } from "lucide-react";
+import imageLoader from '@/lib/imageLoader';
 
 const teamMembers = [
   { name: 'Md Tashfiqul Islam', id: '161 1593 042', image: '/images/team/tashfiq.png', initial: 'M' },
@@ -37,6 +40,7 @@ export default function TeamMembers() {
               <div className="relative w-16 h-16">
                 <div className="absolute inset-0 rounded-full ring-2 ring-primary overflow-hidden">
                   <Image
+                    loader={imageLoader}
                     src={member.image}
                     alt={member.name}
                     fill

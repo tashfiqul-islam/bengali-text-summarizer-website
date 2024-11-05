@@ -6,6 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getImagePath(imageName: string): string {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-  return `${basePath}/images/${imageName}`;
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || 'http://localhost:3000';
+  return new URL(`images/${imageName}`, basePath).toString();
 }
+
+

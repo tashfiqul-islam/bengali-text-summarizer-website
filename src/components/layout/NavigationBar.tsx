@@ -1,16 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from '@/context/ThemeContext'
-import { Sun, Moon, Github } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Sun, Moon, Github, User } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import AuthDialog from '../page-contents/AdditionalContents/AuthDialog'
-import { getImagePath } from '@/lib/utils'
+
 
 export default function NavigationBar() {
   const { theme, setTheme } = useTheme()
@@ -38,7 +36,6 @@ export default function NavigationBar() {
           className="flex items-center gap-2 cursor-pointer" 
           onClick={handleLogoClick}
         >
-          <Image src={getImagePath('bts-logo.png')} alt="Logo" width={40} height={40} />
           <span className="font-semibold text-lg">Bengali Text Summarizer</span>
         </div>
         <div className="flex items-center gap-4">
@@ -50,7 +47,7 @@ export default function NavigationBar() {
                 rel="noopener noreferrer"
               >
                 <Button variant="ghost" size="icon" className="relative h-8 w-8 rounded-full">
-                  <Github className="h-4 w-4" />
+                  <Github className="h-4 w-4 text-foreground" />
                   <span className="sr-only">GitHub Repository</span>
                 </Button>
               </Link>
@@ -74,20 +71,18 @@ export default function NavigationBar() {
             className="relative h-8 w-8 rounded-full"
           >
             {theme === 'light' ? (
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all" />
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all text-foreground" />
             ) : (
-              <Moon className="h-4 w-4 rotate-0 scale-100 transition-all" />
+              <Moon className="h-4 w-4 rotate-0 scale-100 transition-all text-foreground" />
             )}
             <span className="sr-only">Toggle theme</span>
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={getImagePath('profile-avatar.png')} alt="User avatar" />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
+              <Button variant="ghost" size="icon" className="relative h-8 w-8 rounded-full overflow-hidden bg-muted">
+                <User className="h-4 w-4 text-foreground" />
+                <span className="sr-only">User menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
