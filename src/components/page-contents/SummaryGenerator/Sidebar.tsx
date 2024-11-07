@@ -2,7 +2,7 @@ import React from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChevronDown, ChevronRight, PenLine, FileText } from "lucide-react"
-import { categories } from "./constants"
+import { categories } from "../../../lib/constants"
 
 interface SidebarProps {
   isSidebarCollapsed: boolean

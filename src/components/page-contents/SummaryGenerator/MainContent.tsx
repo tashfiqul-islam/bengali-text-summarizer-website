@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { CurrentSection } from "./types"
+import { CurrentSection } from "../../../lib/types"
 
 interface MainContentProps {
   isSidebarCollapsed: boolean
