@@ -11,12 +11,20 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import AuthDialog from '../page-contents/AdditionalContents/AuthDialog'
 
+/**
+ * NavigationBar component for the Bengali Text Summarizer application.
+ * Handles theme toggling, authentication, and navigation.
+ */
 export default function NavigationBar() {
-  // State management for theme, authentication, and component mounting
+  // Theme management
   const { theme, setTheme } = useTheme()
+
+  // Authentication state
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [showAuthDialog, setShowAuthDialog] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
+
+  // Component mounting state to prevent hydration mismatch
   const [isMounted, setIsMounted] = useState(false)
 
   // Effect to set mounted state after initial render
@@ -45,11 +53,10 @@ export default function NavigationBar() {
   // Handler for toggling the theme
   const toggleTheme = useCallback(() => {
     setTheme(theme === 'light' ? 'dark' : 'light')
-  }, [setTheme, theme]) // Include 'theme' in the dependency array
+  }, [setTheme, theme])
 
   return (
     <>
-      {/* Main navigation bar */}
       <nav className="border-b px-6 h-20 flex items-center justify-between">
         {/* Logo and title */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>

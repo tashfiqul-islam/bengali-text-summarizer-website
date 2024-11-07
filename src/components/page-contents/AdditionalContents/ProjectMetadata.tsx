@@ -12,15 +12,14 @@ export default function ProjectMetadata() {
   // Calculate the height of each section based on the percentage of total height
   const calculateHeight = useCallback((percentage: number) => {
     const totalHeight = 800
-    const padding = 16 // 4px * 4 for top, right, bottom, left
-    return Math.floor((totalHeight - padding) * (percentage / 100))
+    return Math.floor(totalHeight * (percentage / 100))
   }, [])
 
   // Common card styles for consistent 3D effect and hover animation
   const cardStyles = "overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-700/30"
 
   return (
-    <div className="w-full h-[800px] p-4">
+    <div className="w-[100%] max-w-[calc(100vw-40px)] mx-auto my-6 h-[800px]">
       <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left Column: Project Overview and Team Members */}
         <div className="flex flex-col gap-4">

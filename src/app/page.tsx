@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { Metadata } from 'next'
 import { Skeleton } from "@/components/ui/skeleton"
 
+
 // Dynamic imports for performance optimization
 const SummaryGenerator = dynamic(() => import('@/components/page-contents/SummaryGenerator/SummaryGenerator'), {
   loading: () => <Skeleton className="h-[400px] w-full rounded-xl" />
@@ -34,13 +35,6 @@ export default function Home() {
           <ProjectMetadata />
         </Suspense>
       </section>
-
-      {/* Footer */}
-      <footer className="flex items-center justify-between py-4 text-sm text-muted-foreground">
-        <p>Senior Capstone Project II | v0.1</p>
-        <p>© 2024 Bengali Text Summarizer</p>
-        <p>{new Date().toLocaleString()}</p>
-      </footer>
     </main>
   )
 }

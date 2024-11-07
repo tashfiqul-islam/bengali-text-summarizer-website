@@ -50,8 +50,10 @@ export default function RootLayout({
             <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-4">
               {children}
             </main>
-            {/* Footer */}
-            <Footer />
+            {/* Footer with added padding and gap */}
+            <div className="mt-8 pt-6">
+              <Footer />
+            </div>
           </div>
         </ThemeProvider>
       </body>
