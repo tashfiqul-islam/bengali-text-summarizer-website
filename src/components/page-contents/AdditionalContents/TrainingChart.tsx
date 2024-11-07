@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useMemo, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -77,8 +75,8 @@ export default function TrainingChart() {
   }, [])
 
   // Handle mouse move on chart for custom tooltip
-  const handleMouseMove = useCallback((props: any) => {
-    if (props.activePayload && props.activePayload[0]) {
+  const handleMouseMove = useCallback((props: { activePayload?: Array<{ payload: TrainingData }> }) => {
+    if (props && props.activePayload && props.activePayload[0]) {
       setActiveTooltipData(props.activePayload[0].payload)
     }
   }, [])

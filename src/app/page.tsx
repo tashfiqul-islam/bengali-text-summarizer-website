@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="flex-1 container mx-auto p-4 space-y-6" aria-label="Bengali Text Summarizer Main Content">
+    <main className="flex-1 container mx-auto p-1 space-y-6" aria-label="Bengali Text Summarizer Main Content">
       {/* Summary Generator Section - Full width */}
       <section className="w-full">
         <Suspense fallback={<Skeleton className="h-[400px] w-full rounded-xl" />}>

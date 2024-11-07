@@ -45,7 +45,7 @@ export default function NavigationBar() {
   // Handler for toggling the theme
   const toggleTheme = useCallback(() => {
     setTheme(theme === 'light' ? 'dark' : 'light')
-  }, [setTheme])
+  }, [setTheme, theme]) // Include 'theme' in the dependency array
 
   return (
     <>

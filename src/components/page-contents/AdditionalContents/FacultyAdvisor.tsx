@@ -1,160 +1,193 @@
-'use client';
+'use client'
 
-import { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { GraduationCap, FileText, Building, Mail, ExternalLink } from "lucide-react";
-import { motion } from 'framer-motion';
+import Image from 'next/image'
+import { Mail, Building, BookOpen, ExternalLink, FileText, GraduationCap } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
-// Define advisor details with proper typing
-interface AdvisorTag {
-  text: string;
-  icon: typeof FileText;
-}
-
+// Define the structure for advisor details
 interface AdvisorDetails {
-  name: string;
-  position: string;
-  university: string;
-  email: string;
-  image: string;
-  tags: AdvisorTag[];
+  name: string
+  shortName: string
+  position: string
+  education: string
+  university: string
+  email: string
+  image: string
+  researchAreas: string[]
+  publications: {
+    total: number
+    journals: number
+  }
+  profileUrl: string
 }
 
+// Faculty advisor data
 const advisorDetails: AdvisorDetails = {
   name: 'Dr. Nafisa Noor',
+  shortName: 'NaNr',
   position: 'Assistant Professor',
-  university: 'North South University',
+  education: 'PhD – Electrical Engineering, University of Connecticut, Storrs, CT, USA',
+  university: 'ECE Department, North South University',
   email: 'nafisa.noor@northsouth.edu',
   image: '/images/faculty/nafisa.jpg',
-  tags: [
-    { text: 'CSE499B.16', icon: FileText },
-    { text: 'ECE Department', icon: Building },
+  researchAreas: [
+    'Semiconductor Device and Technology',
+    'Modeling and Simulation'
   ],
-};
+  publications: {
+    total: 30,
+    journals: 6
+  },
+  profileUrl: 'http://ece.northsouth.edu/people/dr-nafisa-noor/'
+}
 
+// FacultyAdvisor component
 export default function FacultyAdvisor() {
-  const [isClient, setIsClient] = useState(false);
-
-  // Enable client-side features after initial render
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Memoize advisor details
-  const memoizedAdvisorDetails = useMemo(() => advisorDetails, []);
-
-  // Calculate card height (35% of 800px minus padding)
-  const cardHeight = useMemo(() => {
-    const totalHeight = 800;
-    const padding = 16;
-    return Math.floor((totalHeight - padding) * 0.35);
-  }, []);
-
   return (
-    <Card 
-      className={`w-full h-[${cardHeight}px] overflow-hidden bg-gradient-to-br from-teal-50/50 to-blue-50/50 dark:from-teal-950/20 dark:to-blue-950/20 transition-all duration-300 ease-in-out hover:shadow-lg group`}
-    >
-      <CardContent className="p-6 flex flex-col h-full relative">
-        {/* Header Section */}
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <GraduationCap 
-              className="h-6 w-6 text-teal-500 dark:text-teal-400 transition-transform group-hover:scale-110" 
-              aria-hidden="true" 
+    <div className="w-full h-full flex flex-col p-4 bg-white/20 dark:bg-gray-800/20 backdrop-blur-lg overflow-auto">
+      {/* Content Container - ensures consistent padding and layout */}
+      <div className="flex flex-col sm:flex-row gap-4 flex-grow">
+        {/* Profile Image Section */}
+        <ProfileImage image={advisorDetails.image} name={advisorDetails.name} />
+
+        {/* Content Section */}
+        <div className="flex flex-col min-w-0 flex-grow">
+          <div className="space-y-3 sm:space-y-4 flex-grow">
+            <HeaderInfo 
+              name={advisorDetails.name} 
+              shortName={advisorDetails.shortName}
+              position={advisorDetails.position}
+              education={advisorDetails.education}
+              university={advisorDetails.university}
             />
-            <h2 className="text-xl font-bold text-teal-700 dark:text-teal-300">
-              Faculty Advisor
-            </h2>
+            <ResearchAreas areas={advisorDetails.researchAreas} />
+            <Publications publications={advisorDetails.publications} />
           </div>
-          <Badge 
-            variant="secondary" 
-            className="bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300"
-          >
-            Mentor
-          </Badge>
+          
+          {/* Action Buttons aligned with text and at the bottom */}
+          <ActionButtons email={advisorDetails.email} profileUrl={advisorDetails.profileUrl} />
         </div>
+      </div>
+    </div>
+  )
+}
 
-        {/* Main Content Section */}
-        <div className="flex items-start gap-6 mb-6">
-          <motion.div 
-            className="relative w-24 h-24 rounded-full overflow-hidden ring-2 ring-teal-200 dark:ring-teal-700 shrink-0"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {isClient ? (
-              <Image
-                src={memoizedAdvisorDetails.image}
-                alt={memoizedAdvisorDetails.name}
-                fill
-                sizes="96px"
-                className="object-cover"
-                priority
-              />
-            ) : (
-              <div 
-                className="w-full h-full bg-teal-100 dark:bg-teal-800" 
-                aria-label="Profile picture placeholder" 
-              />
-            )}
-          </motion.div>
-          <div className="flex flex-col gap-2">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
-              {memoizedAdvisorDetails.name}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {memoizedAdvisorDetails.position}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {memoizedAdvisorDetails.university}
-            </p>
-            <a 
-              href={`mailto:${memoizedAdvisorDetails.email}`} 
-              className="flex items-center gap-2 text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
-            >
-              <Mail className="h-4 w-4" aria-hidden="true" />
-              {memoizedAdvisorDetails.email}
-            </a>
-          </div>
+// ProfileImage component
+function ProfileImage({ image, name }: { image: string; name: string }) {
+  return (
+    <div className="relative w-16 h-16 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0">
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 animate-gradient" />
+      <div className="absolute inset-[2px] rounded-lg overflow-hidden bg-white dark:bg-gray-900">
+        <Image
+          src={image}
+          alt={name}
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+    </div>
+  )
+}
+
+// HeaderInfo component
+function HeaderInfo({ 
+  name, 
+  shortName, 
+  position, 
+  education,
+  university
+}: { 
+  name: string
+  shortName: string
+  position: string
+  education: string
+  university: string
+}) {
+  return (
+    <div className="space-y-2">
+      <h2 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100 leading-normal break-words">
+        {name} [{shortName}]
+      </h2>
+      <p className="text-xs sm:text-sm text-purple-600 dark:text-purple-400 leading-normal">
+        {position}
+      </p>
+      <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-1.5 leading-normal">
+        <GraduationCap className="h-3.5 w-3.5 flex-shrink-0" />
+        <span>{education}</span>
+      </p>
+      <div className="text-xs text-gray-600 dark:text-gray-400">
+        <div className="flex items-start sm:items-center gap-1.5 leading-normal">
+          <Building className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 sm:mt-0" />
+          <span className="break-words">{university}</span>
         </div>
+      </div>
+    </div>
+  )
+}
 
-        {/* Tags Section */}
-        <div className="flex-grow">
-          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-            Areas of Expertise
-          </h4>
-          <div className="flex flex-wrap gap-2">
-            {memoizedAdvisorDetails.tags.map(({ text, icon: Icon }) => (
-              <Badge 
-                key={text} 
-                variant="secondary"
-                className="bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 transition-colors"
-              >
-                <Icon className="h-3 w-3 mr-1" aria-hidden="true" />
-                {text}
-              </Badge>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer Link */}
-        <motion.div 
-          className="absolute bottom-6 right-6"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+// ResearchAreas component
+function ResearchAreas({ areas }: { areas: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+      {areas.map((area) => (
+        <Badge
+          key={area}
+          variant="secondary"
+          className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs bg-purple-100 text-purple-900 dark:bg-purple-900/30 dark:text-purple-100"
         >
-          <a
-            href="#" 
-            className="flex items-center gap-1 text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-colors group-hover:translate-x-1"
-          >
-            View Full Profile
-            <ExternalLink className="h-4 w-4" aria-hidden="true" />
-          </a>
-        </motion.div>
-      </CardContent>
-    </Card>
-  );
+          {area}
+        </Badge>
+      ))}
+    </div>
+  )
+}
+
+// Publications component
+function Publications({ publications }: { publications: { total: number; journals: number } }) {
+  return (
+    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-gray-900 dark:text-gray-100">
+      <div className="flex items-center gap-1.5">
+        <BookOpen className="h-3.5 w-3.5 text-purple-500" />
+        <span className="leading-normal">{publications.total} Publications</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <FileText className="h-3.5 w-3.5 text-purple-500" />
+        <span className="leading-normal">{publications.journals} Journals</span>
+      </div>
+    </div>
+  )
+}
+
+// ActionButtons component
+function ActionButtons({ email, profileUrl }: { email: string; profileUrl: string }) {
+  return (
+    <div className="flex flex-wrap items-center gap-2 pt-4">
+      {/* Contact button */}
+      <Button
+        asChild
+        size="sm"
+        className="h-7 px-2.5 text-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+      >
+        <a href={`mailto:${email}`}>
+          <Mail className="h-3.5 w-3.5" />
+          Contact via Email
+        </a>
+      </Button>
+      
+      {/* View Profile button */}
+      <Button
+        asChild
+        variant="ghost"
+        size="sm"
+        className="h-7 px-2.5 text-xs text-gray-600 dark:text-gray-400"
+      >
+        <a href={profileUrl} target="_blank" rel="noopener noreferrer">
+          <span>View Profile</span>
+          <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+        </a>
+      </Button>
+    </div>
+  )
 }

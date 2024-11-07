@@ -2,11 +2,6 @@
 
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
-import {
-  NameType,
-  Payload,
-  ValueType,
-} from "recharts/types/component/DefaultTooltipContent"
 
 import { cn } from "@/lib/utils"
 
@@ -74,7 +69,7 @@ ChartContainer.displayName = "Chart"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([_, config]) => config.theme || config.color
+    ([, itemConfig]) => itemConfig.theme || itemConfig.color
   )
 
   if (!colorConfig.length) {
@@ -95,6 +90,7 @@ ${colorConfig
       itemConfig.color
     return color ? `  --color-${key}: ${color};` : null
   })
+  .filter(Boolean)
   .join("\n")}
 }
 `
