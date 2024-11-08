@@ -45,7 +45,7 @@ const advisorDetails: AdvisorDetails = {
 // FacultyAdvisor component
 export default function FacultyAdvisor() {
   return (
-    <div className="w-full h-full flex flex-col p-4 bg-white/20 dark:bg-gray-800/20 backdrop-blur-lg overflow-auto">
+    <div className="w-full h-full flex flex-col p-4 bg-white/20 dark:bg-gray-800/20 backdrop-blur-lg sm:overflow-auto overflow-hidden">
       {/* Content Container - ensures consistent padding and layout */}
       <div className="flex flex-col sm:flex-row gap-4 flex-grow">
         {/* Profile Image Section */}
@@ -62,7 +62,9 @@ export default function FacultyAdvisor() {
               university={advisorDetails.university}
             />
             <ResearchAreas areas={advisorDetails.researchAreas} />
-            <Publications publications={advisorDetails.publications} />
+            <div className="hidden sm:block">
+              <Publications publications={advisorDetails.publications} />
+            </div>
           </div>
           
           {/* Action Buttons aligned with text and at the bottom */}

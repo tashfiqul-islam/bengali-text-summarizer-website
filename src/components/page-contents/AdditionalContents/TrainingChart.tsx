@@ -1,13 +1,18 @@
-import { useState, useMemo, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts'
-import { TrendingDown, ChevronLeft, ChevronRight, Info } from 'lucide-react'
+'use client'
 
-// Define types for our data structures
-interface TrainingData {
+import React from 'react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Line, LineChart, ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
+import { TrendingDown, TrendingUp } from 'lucide-react'
+
+// Types for data structures
+interface StatCard {
+  title: string
+  value: string
+  change: number
+}
+
+interface DataPoint {
   epoch: number
   trainingLoss: number
   validationLoss: number
@@ -15,10 +20,17 @@ interface TrainingData {
 
 interface TrainingSession {
   name: string
-  data: TrainingData[]
+  data: DataPoint[]
 }
 
-// Training data
+// Stat cards configuration
+const statsCards: StatCard[] = [
+  { title: "Training Loss", value: "0.99", change: -18.34 },
+  { title: "Validation Loss", value: "0.67", change: -15.21 },
+  { title: "Accuracy", value: "92.50", change: 7.89 }
+]
+
+// Training sessions data
 const trainingSessions: TrainingSession[] = [
   {
     name: "Training 1",
@@ -48,159 +60,115 @@ const trainingSessions: TrainingSession[] = [
   }
 ]
 
-export default function TrainingChart() {
-  const [activeSessionIndex, setActiveSessionIndex] = useState(0)
-  const [activeTooltipData, setActiveTooltipData] = useState<TrainingData | null>(null)
-
-  // Memoize the current session data
-  const currentSession = useMemo(() => trainingSessions[activeSessionIndex], [activeSessionIndex])
-
-  // Calculate percentage decrease in loss
-  const percentDecrease = useMemo(() => {
-    const initialLoss = currentSession.data[0].trainingLoss
-    const finalLoss = currentSession.data[currentSession.data.length - 1].trainingLoss
-    return ((initialLoss - finalLoss) / initialLoss * 100).toFixed(2)
-  }, [currentSession])
-
-  // Memoize session navigation functions to prevent unnecessary re-renders
-  const nextSession = useCallback(() => setActiveSessionIndex((prev) => (prev + 1) % trainingSessions.length), [])
-  const prevSession = useCallback(() => setActiveSessionIndex((prev) => (prev - 1 + trainingSessions.length) % trainingSessions.length), [])
-
-  // Calculate the height based on 65% of 800px minus padding
-  const chartHeight = useMemo(() => {
-    const totalHeight = 800
-    const padding = 8 // 4px top + 4px bottom
-    const availableHeight = totalHeight - padding
-    return Math.floor(availableHeight * 0.65)
-  }, [])
-
-  // Handle mouse move on chart for custom tooltip
-  const handleMouseMove = useCallback((props: { activePayload?: Array<{ payload: TrainingData }> }) => {
-    if (props && props.activePayload && props.activePayload[0]) {
-      setActiveTooltipData(props.activePayload[0].payload)
-    }
-  }, [])
-
-  // Handle mouse leave on chart
-  const handleMouseLeave = useCallback(() => {
-    setActiveTooltipData(null)
-  }, [])
+// Stat card component
+const StatCard: React.FC<{ index: number }> = ({ index }) => {
+  const card = statsCards[index]
+  const isPositive = card.change > 0
+  const TrendIcon = isPositive ? TrendingUp : TrendingDown
+  const changeColor = isPositive ? 'text-emerald-500' : 'text-rose-500'
 
   return (
-    <Card className={`w-full h-[${chartHeight}px] overflow-hidden bg-gradient-to-br from-teal-50 to-purple-50 dark:from-teal-950/50 dark:to-purple-950/50 transition-shadow duration-300 ease-in-out hover:shadow-lg`}>
-      <CardHeader className="p-4 pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-teal-600 dark:text-teal-400">
-            {currentSession.name}
-          </CardTitle>
-          <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 text-xs">
-            {currentSession.data.length} Epochs
-          </Badge>
-        </div>
-        <CardDescription className="text-teal-500 dark:text-teal-400">
-          Training and Validation Loss
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-4 h-[calc(100%-8rem)]">
-        <div className="w-full h-full relative">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart 
-              data={currentSession.data} 
-              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="currentColor" opacity={0.1} />
-              <XAxis 
-                dataKey="epoch" 
-                tickLine={false} 
-                axisLine={false} 
-                tickFormatter={(value) => `Epoch ${value}`}
-                fontSize={10}
-                stroke="currentColor"
-                opacity={0.5}
-              />
-              <YAxis 
-                tickLine={false} 
-                axisLine={false} 
-                fontSize={10}
-                stroke="currentColor"
-                opacity={0.5}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="trainingLoss" 
-                stroke="#0d9488" 
-                strokeWidth={2} 
-                dot={{ r: 3, fill: "#0d9488" }}
-                activeDot={{ r: 5, fill: "#0d9488" }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="validationLoss" 
-                stroke="#a855f7" 
-                strokeWidth={2} 
-                dot={{ r: 3, fill: "#a855f7" }}
-                activeDot={{ r: 5, fill: "#a855f7" }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-          {activeTooltipData && (
-            <TooltipProvider>
-              <Tooltip open={true}>
-                <TooltipTrigger asChild>
-                  <div className="absolute inset-0" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div className="text-sm">
-                    <p className="font-bold">Epoch {activeTooltipData.epoch}</p>
-                    <p className="text-teal-600">Training Loss: {activeTooltipData.trainingLoss.toFixed(6)}</p>
-                    <p className="text-purple-600">Validation Loss: {activeTooltipData.validationLoss.toFixed(6)}</p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-        </div>
-      </CardContent>
-      <CardFooter className="p-4 pt-2 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <TrendingDown className="h-4 w-4 text-teal-500 dark:text-teal-400" />
-          <span className="text-sm font-medium text-teal-600 dark:text-teal-400">
-            {percentDecrease}% Decrease
-          </span>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-6 w-6 p-0">
-                  <Info className="h-3 w-3 text-teal-500 dark:text-teal-400" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-xs">Decrease in training loss from first to last epoch</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        <div className="flex space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={prevSession}
-            className="h-7 w-7 p-0 bg-teal-100 hover:bg-teal-200 dark:bg-teal-900/50 dark:hover:bg-teal-900"
-          >
-            <ChevronLeft className="h-4 w-4 text-teal-600 dark:text-teal-400" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={nextSession}
-            className="h-7 w-7 p-0 bg-teal-100 hover:bg-teal-200 dark:bg-teal-900/50 dark:hover:bg-teal-900"
-          >
-            <ChevronRight className="h-4 w-4 text-teal-600 dark:text-teal-400" />
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
+    <div className="h-full p-4 flex flex-col justify-between">
+      <h3 className="text-sm font-medium text-muted-foreground">{card.title}</h3>
+      <p className="text-2xl font-bold tracking-tight">{card.value}</p>
+      <div className={`flex items-center text-sm font-medium ${changeColor}`}>
+        <TrendIcon className="h-4 w-4 mr-1" />
+        {Math.abs(card.change)}%
+      </div>
+    </div>
   )
 }
+
+// Main chart component
+const Chart: React.FC = () => {
+  const [selectedTraining, setSelectedTraining] = React.useState(trainingSessions[0].name)
+
+  // Get current training session data
+  const currentSession = trainingSessions.find(session => session.name === selectedTraining)
+  const chartData = currentSession?.data.map(point => ({
+    ...point,
+    epoch: `Epoch ${point.epoch}`
+  }))
+
+  return (
+    <div className="h-full flex flex-col p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
+        <div>
+          <h2 className="text-lg font-semibold">Training Progress</h2>
+          <p className="text-sm text-muted-foreground">Performance metrics over time</p>
+        </div>
+        <Select
+          value={selectedTraining}
+          onValueChange={setSelectedTraining}
+        >
+          <SelectTrigger className="w-[140px] dark:border-gray-700">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {trainingSessions.map((session) => (
+              <SelectItem key={session.name} value={session.name}>
+                {session.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex-1">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+            <XAxis
+              dataKey="epoch"
+              stroke="hsl(var(--muted-foreground))"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis
+              stroke="hsl(var(--muted-foreground))"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) => value.toFixed(2)}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'hsl(var(--background))',
+                borderRadius: '8px',
+                border: '1px solid hsl(var(--border))',
+                boxShadow: 'hsl(var(--shadow)) 0px 4px 12px',
+              }}
+              labelStyle={{ color: 'hsl(var(--foreground))' }}
+            />
+            <Line
+              type="monotone"
+              dataKey="trainingLoss"
+              stroke="hsl(346, 87%, 43%)"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6 }}
+              name="Training Loss"
+            />
+            <Line
+              type="monotone"
+              dataKey="validationLoss"
+              stroke="hsl(142, 76%, 36%)"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6 }}
+              name="Validation Loss"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  )
+}
+
+// Export components
+const TrainingChart = {
+  StatCard,
+  Chart
+}
+
+export default TrainingChart

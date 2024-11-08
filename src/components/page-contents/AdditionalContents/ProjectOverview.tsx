@@ -145,7 +145,7 @@ export default function ProjectOverview() {
                 <Card className="overflow-hidden mb-2">
                   <CardContent className="p-0">
                     {/* Code container with internal scroll */}
-                    <div className="max-h-[360px] sm:max-h-[205px] overflow-y-auto scrollbar-thin scrollbar-thumb-secondary scrollbar-track-secondary/20">
+                    <div className="max-h-[360px] sm:max-h-[215px] overflow-y-auto scrollbar-thin scrollbar-thumb-secondary scrollbar-track-secondary/20">
                       <pre className="bg-muted font-mono leading-relaxed">
                         <code className="block whitespace-pre text-xs sm:text-sm px-4 py-3">
 {`# Import required libraries

@@ -1,17 +1,16 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React from 'react'
+import Image from 'next/image'
+import { ChevronDown, Hash, Brain, MessageSquare, Files } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Users, Hash } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
 
-// Define types for team members and group tags
+// Define types for team member and group tag data
 interface TeamMember {
   name: string
   id: string
   image: string
+  role: 'Team Lead' | 'Developer'
 }
 
 interface GroupTag {
@@ -19,127 +18,78 @@ interface GroupTag {
   icon: React.ElementType
 }
 
-// Define team members and group tags
+// Team members data
 const teamMembers: TeamMember[] = [
-  { name: 'Md Tashfiqul Islam', id: '161 1593 042', image: '/images/team/tashfiq.png' },
-  { name: 'Tashin Mahmud Khan', id: '201 1819 042', image: '/images/team/tashin.png' },
-  { name: 'Amir Hamja Marjan', id: '202 1171 642', image: '/images/team/amir.png' },
-  { name: 'Md Simul Hossain', id: '171 1949 642', image: '/images/team/simul.png' },
+  { name: 'Md Tashfiqul Islam', id: '161 1593 042', image: '/images/team/tashfiq.png', role: 'Team Lead' },
+  { name: 'Tashin Mahmud Khan', id: '201 1819 042', image: '/images/team/tashin.png', role: 'Developer' },
+  { name: 'Amir Hamja Marjan', id: '202 1171 642', image: '/images/team/amir.png', role: 'Developer' },
+  { name: 'Md Simul Hossain', id: '171 1949 642', image: '/images/team/simul.png', role: 'Developer' },
 ]
 
+// Group tags data
 const groupTags: GroupTag[] = [
-  { text: 'CSE 499B.16', icon: BookOpen },
-  { text: 'Senior Design II', icon: Users },
   { text: 'Group 01', icon: Hash },
+  { text: 'Machine Learning', icon: Brain },
+  { text: 'NLP', icon: MessageSquare },
+  { text: 'Summarizer', icon: Files },
 ]
-
-// Animation variants for different transitions
-const variants = {
-  topLeftToBottomRight: {
-    initial: { x: '-100%', y: '-100%', opacity: 0 },
-    animate: { x: 0, y: 0, opacity: 1 },
-    exit: { x: '100%', y: '100%', opacity: 0 },
-  },
-  bottomToTop: {
-    initial: { y: '100%', opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-    exit: { y: '-100%', opacity: 0 },
-  },
-  rightToLeft: {
-    initial: { x: '100%', opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: '-100%', opacity: 0 },
-  },
-  scaleUp: {
-    initial: { scale: 0.8, opacity: 0 },
-    animate: { scale: 1, opacity: 1 },
-    exit: { scale: 1.2, opacity: 0 },
-  },
-}
 
 export default function TeamMembers() {
-  const [activeIndex, setActiveIndex] = useState(0)
-
-  // Memoize group tags to prevent unnecessary re-renders
-  const memoizedGroupTags = useMemo(() => groupTags, [])
-
-  // Auto-rotate active member every 5 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % teamMembers.length)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [])
-
-  // Choose a random animation variant for each transition
-  const getRandomVariant = () => {
-    const keys = Object.keys(variants) as Array<keyof typeof variants>
-    return variants[keys[Math.floor(Math.random() * keys.length)]]
-  }
-
-  // Calculate the height based on 35% of 800px minus padding
-  const cardHeight = useMemo(() => {
-    const totalHeight = 800
-    const padding = 16 // 4px * 4 for top, right, bottom, left
-    return Math.floor((totalHeight - padding) * 0.35)
-  }, [])
-
   return (
-    <Card 
-      className={`w-full h-[${cardHeight}px] bg-gradient-to-br from-teal-400 to-blue-500 dark:from-teal-900 dark:to-blue-900 overflow-hidden transition-shadow duration-300 ease-in-out hover:shadow-lg`}
-    >
-      <CardContent className="h-full p-4 flex flex-col justify-between">
-        {/* Header with title and group tags */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 space-y-2 sm:space-y-0">
-          <h2 className="text-lg font-bold text-white">Team Members</h2>
-          <div className="flex flex-wrap gap-1">
-            {memoizedGroupTags.map((tag) => (
-              <Badge key={tag.text} variant="secondary" className="bg-white/20 text-white text-xs px-1.5 py-0.5">
-                <tag.icon className="w-3 h-3 mr-1" />
-                <span className="hidden sm:inline">{tag.text}</span>
-              </Badge>
-            ))}
+    <div className="flex flex-col h-full p-4 bg-background text-foreground">
+      {/* Header Section */}
+      <div className="mb-2">
+        <h2 className="text-lg font-semibold mb-5">Team Members</h2>
+        
+        {/* Group Tags - hidden on mobile, visible on md and larger screens */}
+        <div className="m-2 mb-5">
+          <div className="flex flex-wrap gap-2">
+            {groupTags.map((tag) => {
+              const Icon = tag.icon
+              return (
+                <Badge 
+                  key={tag.text} 
+                  variant="secondary" 
+                  className="bg-muted hover:bg-muted/80 transition-colors text-xs py-0 px-2"
+                >
+                  <Icon className="w-3 h-3 mr-1" />
+                  {tag.text}
+                </Badge>
+              )
+            })}
           </div>
         </div>
+      </div>
 
-        {/* Active team member display */}
-        <div className="flex-grow flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              variants={getRandomVariant()}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="text-center"
-            >
-              <Avatar className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-2 border-4 border-white/50">
-                <AvatarImage src={teamMembers[activeIndex].image} alt={teamMembers[activeIndex].name} />
-                <AvatarFallback>{teamMembers[activeIndex].name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-              </Avatar>
-              <h3 className="font-semibold text-sm sm:text-base text-white">{teamMembers[activeIndex].name}</h3>
-              <p className="text-xs sm:text-sm text-white/80">{teamMembers[activeIndex].id}</p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Team member indicators */}
-        <div className="flex justify-center space-x-2 mt-2">
-          {teamMembers.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === activeIndex 
-                  ? 'bg-white scale-125' 
-                  : 'bg-white/50 scale-100 hover:bg-white/70'
-              }`}
-              aria-label={`View team member ${index + 1}`}
-            />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+      {/* Team Members Grid */}
+      <div className="grid grid-cols-2 gap-2">
+        {teamMembers.map((member) => (
+          <div 
+            key={member.id}
+            className="flex items-center justify-between p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <div className="relative w-8 h-10">
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  className="rounded-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium leading-tight">{member.name}</h3>
+                <p className="text-xs text-muted-foreground leading-tight">{member.id}</p>
+              </div>
+            </div>
+            {/* Role tag - hidden on mobile, visible on md and larger screens */}
+            <div className="hidden md:flex items-center gap-1 bg-background/50 px-2 py-1 rounded text-xs font-medium">
+              {member.role}
+              <ChevronDown className="w-3 h-3 text-muted-foreground" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
