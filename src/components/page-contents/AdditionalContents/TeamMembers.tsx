@@ -1,61 +1,95 @@
-'use client';
+'use client'
 
-import Image from 'next/image';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { BookOpen, Users, Hash } from "lucide-react";
+import React from 'react'
+import Image from 'next/image'
+import { ChevronDown, Hash, Brain, MessageSquare, Files } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
 
-const teamMembers = [
-  { name: 'Md Tashfiqul Islam', id: '161 1593 042', image: '/images/team/tashfiq.png', initial: 'M' },
-  { name: 'Tashin Mahmud Khan', id: '201 1819 042', image: '/images/team/tashin.png', initial: 'T' },
-  { name: 'Amir Hamja Marjan', id: '202 1171 642', image: '/images/team/amir.png', initial: 'A' },
-  { name: 'Md Simul Hossain', id: '171 1949 642', image: '/images/team/simul.png', initial: 'M' },
-];
+// Define types for team member and group tag data
+interface TeamMember {
+  name: string
+  id: string
+  image: string
+  role: 'Team Lead' | 'Developer'
+}
+
+interface GroupTag {
+  text: string
+  icon: React.ElementType
+}
+
+// Team members data
+const teamMembers: TeamMember[] = [
+  { name: 'Md Tashfiqul Islam', id: '161 1593 042', image: '/images/team/tashfiq.png', role: 'Team Lead' },
+  { name: 'Tashin Mahmud Khan', id: '201 1819 042', image: '/images/team/tashin.png', role: 'Developer' },
+  { name: 'Amir Hamja Marjan', id: '202 1171 642', image: '/images/team/amir.png', role: 'Developer' },
+  { name: 'Md Simul Hossain', id: '171 1949 642', image: '/images/team/simul.png', role: 'Developer' },
+]
+
+// Group tags data
+const groupTags: GroupTag[] = [
+  { text: 'Group 01', icon: Hash },
+  { text: 'Machine Learning', icon: Brain },
+  { text: 'NLP', icon: MessageSquare },
+  { text: 'Summarizer', icon: Files },
+]
 
 export default function TeamMembers() {
   return (
-    <Card className="overflow-hidden bg-card text-card-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] h-[637px]">
-      <CardHeader className="bg-gradient-to-r from-[#348f50] to-[#56b4d3] p-6">
-        <CardTitle className="text-2xl font-bold text-white">Group Overview</CardTitle>
-      </CardHeader>
-
-      <CardContent className="p-5 space-y-4">
-        <div className="flex flex-wrap gap-2">
-          {['CSE 499B.16', 'Senior Design II', 'Group 01'].map((item, index) => (
-            <div key={item} className="bg-secondary text-secondary-foreground rounded-full px-3 py-1.5 flex items-center gap-2 hover:bg-secondary/80 transition-colors">
-              {index === 0 && <BookOpen className="h-4 w-4" />}
-              {index === 1 && <Users className="h-4 w-4" />}
-              {index === 2 && <Hash className="h-4 w-4" />}
-              <span className="text-xs">{item}</span>
-            </div>
-          ))}
+    <div className="flex flex-col h-full p-4 bg-background text-foreground">
+      {/* Header Section */}
+      <div className="mb-2">
+        <h2 className="text-lg font-semibold mb-5">Team Members</h2>
+        
+        {/* Group Tags - hidden on mobile, visible on md and larger screens */}
+        <div className="m-2 mb-5">
+          <div className="flex flex-wrap gap-2">
+            {groupTags.map((tag) => {
+              const Icon = tag.icon
+              return (
+                <Badge 
+                  key={tag.text} 
+                  variant="secondary" 
+                  className="bg-muted hover:bg-muted/80 transition-colors text-xs py-0 px-2"
+                >
+                  <Icon className="w-3 h-3 mr-1" />
+                  {tag.text}
+                </Badge>
+              )
+            })}
+          </div>
         </div>
+      </div>
 
-        <div className="space-y-5">
-          {teamMembers.map((member) => (
-            <div 
-              key={member.id} 
-              className="bg-accent/50 dark:bg-accent/20 rounded-lg p-5 flex items-center gap-5 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-x-1 dark:shadow-none dark:hover:shadow-md"
-            >
-              <div className="relative w-16 h-16">
-                <div className="absolute inset-0 rounded-full ring-2 ring-primary overflow-hidden">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
+      {/* Team Members Grid */}
+      <div className="grid grid-cols-2 gap-2">
+        {teamMembers.map((member) => (
+          <div 
+            key={member.id}
+            className="flex items-center justify-between p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <div className="relative w-8 h-10">
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  className="rounded-full object-cover"
+                />
               </div>
               <div>
-                <h3 className="font-medium text-foreground text-lg">{member.name}</h3>
-                <p className="text-sm text-muted-foreground">{member.id}</p>
+                <h3 className="text-sm font-medium leading-tight">{member.name}</h3>
+                <p className="text-xs text-muted-foreground leading-tight">{member.id}</p>
               </div>
             </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
+            {/* Role tag - hidden on mobile, visible on md and larger screens */}
+            <div className="hidden md:flex items-center gap-1 bg-background/50 px-2 py-1 rounded text-xs font-medium">
+              {member.role}
+              <ChevronDown className="w-3 h-3 text-muted-foreground" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }

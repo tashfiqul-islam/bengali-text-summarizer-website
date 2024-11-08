@@ -1,14 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // Enable React Strict Mode for improved error handling
+  reactStrictMode: true,
+
+  // Output a standalone build for improved performance
+  output: 'standalone',
+  
+  // Configure image optimization
   images: {
-    dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -19,22 +19,64 @@ const nextConfig: NextConfig = {
         hostname: "localhost",
       },
     ],
-    domains: ['bengali-text-summarizer-website.vercel.app', 'localhost'],
+    // Disable runtime image optimization in production
     unoptimized: process.env.NODE_ENV === 'production',
   },
+  
+  // Configure experimental features
   experimental: {
-    // Experimental features can be added here if needed
+    // Enable and configure Server Actions
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'bengali-text-summarizer-website.vercel.app'],
+      bodySizeLimit: '2mb',
+    },
   },
-  devIndicators: {
-    appIsrStatus: true,
-    buildActivity: true,
-    buildActivityPosition: "bottom-right",
+  
+  // Set custom headers for improved caching
+  async headers() {
+    return [
+      {
+        // Default cache policy for all routes
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=59',
+          },
+        ],
+      },
+      {
+        // Specific cache policy for static assets
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Cache policy for static JavaScript files
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
   },
-  output: 'standalone',
-  assetPrefix: process.env.NODE_ENV === 'production' 
-    ? 'https://bengali-text-summarizer-website.vercel.app' 
-    : undefined,
-  basePath: '',
+
+  // Configure redirects (if needed)
+  async redirects() {
+    return [];
+  },
+
+  // Configure rewrites (if needed)
+  async rewrites() {
+    return [];
+  },
 };
 
 export default nextConfig;

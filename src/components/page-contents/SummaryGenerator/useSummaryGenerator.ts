@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import { categories } from './constants'
-import { CurrentSection } from './types'
+import { categories } from '../../../lib/constants'
+import { CurrentSection } from '../../../lib/types'
 
 export function useSummaryGenerator() {
   const [articleText, setArticleText] = useState('')

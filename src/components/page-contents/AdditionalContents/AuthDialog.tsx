@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Github } from 'lucide-react';
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+// Define prop types for the AuthDialog component
 type AuthDialogProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -18,17 +19,27 @@ type AuthDialogProps = {
 };
 
 export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: AuthDialogProps) {
+  // State to manage the current authentication mode (login or register)
   const [authMode, setAuthMode] = useState<'login' | 'register'>(initialMode);
 
+  // Effect to update authMode when the dialog opens or initialMode changes
   useEffect(() => {
     setAuthMode(initialMode);
   }, [initialMode, isOpen]);
+
+  // Callback for handling form submission
+  const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onLogin();
+    onClose();
+  }, [onLogin, onClose]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[1000px] p-0 overflow-hidden">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         <div className="grid lg:grid-cols-2 gap-0">
+          {/* Left side - Image and quote (hidden on small screens) */}
           <div className="relative hidden lg:flex flex-col items-center justify-between p-8">
             <Image
               src="/images/7.jpg"
@@ -44,16 +55,18 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
               </p>
             </div>
           </div>
+          {/* Right side - Authentication forms */}
           <div className="p-8">
             <Tabs value={authMode} onValueChange={(value) => setAuthMode(value as 'login' | 'register')} className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="register">Register</TabsTrigger>
               </TabsList>
+              {/* Login form */}
               <TabsContent value="login" className="space-y-4">
                 <h3 className="text-2xl font-semibold">Welcome back</h3>
                 <p className="text-sm text-muted-foreground">Enter your email to sign in to your account</p>
-                <div className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -63,6 +76,7 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
                       autoCapitalize="none"
                       autoComplete="email"
                       autoCorrect="off"
+                      required
                     />
                   </div>
                   <div className="space-y-2">
@@ -73,20 +87,19 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
                       autoCapitalize="none"
                       autoComplete="current-password"
                       autoCorrect="off"
+                      required
                     />
                   </div>
-                  <Button className="w-full" onClick={() => {
-                    onLogin();
-                    onClose();
-                  }}>
+                  <Button className="w-full" type="submit">
                     Sign in
                   </Button>
-                </div>
+                </form>
               </TabsContent>
+              {/* Register form */}
               <TabsContent value="register" className="space-y-4">
                 <h3 className="text-2xl font-semibold">Create an account</h3>
                 <p className="text-sm text-muted-foreground">Enter your email below to create your account</p>
-                <div className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="new-email">Email</Label>
                     <Input
@@ -96,6 +109,7 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
                       autoCapitalize="none"
                       autoComplete="email"
                       autoCorrect="off"
+                      required
                     />
                   </div>
                   <div className="space-y-2">
@@ -106,17 +120,16 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
                       autoCapitalize="none"
                       autoComplete="new-password"
                       autoCorrect="off"
+                      required
                     />
                   </div>
-                  <Button className="w-full" onClick={() => {
-                    onLogin();
-                    onClose();
-                  }}>
+                  <Button className="w-full" type="submit">
                     Create account
                   </Button>
-                </div>
+                </form>
               </TabsContent>
             </Tabs>
+            {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
@@ -127,6 +140,7 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
                 </span>
               </div>
             </div>
+            {/* Social login buttons */}
             <div className="grid grid-cols-2 gap-4">
               <Button variant="outline" className="w-full" type="button">
                 <Github className="mr-2 h-4 w-4" />
@@ -143,6 +157,7 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
                 Google
               </Button>
             </div>
+            {/* Terms and Privacy Policy */}
             <p className="mt-6 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{' '}
               <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
