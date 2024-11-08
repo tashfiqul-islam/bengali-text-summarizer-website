@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import FacultyAdvisor from "./FacultyAdvisor"
 import ProjectOverview from "./ProjectOverview"
 import TeamMembers from "./TeamMembers"
+import StatsCard from './StatsCard'
 import TrainingChart from './TrainingChart'
 
 // ProjectMetadata component: Displays the main project information layout
@@ -58,13 +59,13 @@ export default function ProjectMetadata() {
             {/* Stats Cards Grid */}
             <div className="grid grid-cols-3 gap-5" style={{ height: '125px' }}>
               <Card className={cardStyles}>
-              <TrainingChart.StatCard index={0} />
+              <StatsCard index={0} />
               </Card>
               <Card className={cardStyles}>
-              <TrainingChart.StatCard index={1} />
+              <StatsCard index={1} />
               </Card>
               <Card className={cardStyles}>
-              <TrainingChart.StatCard index={2} />
+              <StatsCard index={2} />
               </Card>
             </div>
 

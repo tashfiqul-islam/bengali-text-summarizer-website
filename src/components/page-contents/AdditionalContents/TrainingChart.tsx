@@ -3,15 +3,8 @@
 import React from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Line, LineChart, ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
-import { TrendingDown, TrendingUp } from 'lucide-react'
 
 // Types for data structures
-interface StatCard {
-  title: string
-  value: string
-  change: number
-}
-
 interface DataPoint {
   epoch: number
   trainingLoss: number
@@ -22,13 +15,6 @@ interface TrainingSession {
   name: string
   data: DataPoint[]
 }
-
-// Stat cards configuration
-const statsCards: StatCard[] = [
-  { title: "Training Loss", value: "0.99", change: -18.34 },
-  { title: "Validation Loss", value: "0.67", change: -15.21 },
-  { title: "Accuracy", value: "92.50", change: 7.89 }
-]
 
 // Training sessions data
 const trainingSessions: TrainingSession[] = [
@@ -59,25 +45,6 @@ const trainingSessions: TrainingSession[] = [
     ]
   }
 ]
-
-// Stat card component
-const StatCard: React.FC<{ index: number }> = ({ index }) => {
-  const card = statsCards[index]
-  const isPositive = card.change > 0
-  const TrendIcon = isPositive ? TrendingUp : TrendingDown
-  const changeColor = isPositive ? 'text-emerald-500' : 'text-rose-500'
-
-  return (
-    <div className="h-full p-4 flex flex-col justify-between">
-      <h3 className="text-sm font-medium text-muted-foreground">{card.title}</h3>
-      <p className="text-2xl font-bold tracking-tight">{card.value}</p>
-      <div className={`flex items-center text-sm font-medium ${changeColor}`}>
-        <TrendIcon className="h-4 w-4 mr-1" />
-        {Math.abs(card.change)}%
-      </div>
-    </div>
-  )
-}
 
 // Main chart component
 const Chart: React.FC = () => {
@@ -165,9 +132,8 @@ const Chart: React.FC = () => {
   )
 }
 
-// Export components
+// Export component
 const TrainingChart = {
-  StatCard,
   Chart
 }
 
