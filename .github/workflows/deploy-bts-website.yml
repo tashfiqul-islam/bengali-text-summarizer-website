@@ -49,6 +49,7 @@ jobs:
           else
             echo "Unable to determine package manager"
             exit 1
+          fi # Close the if statement to prevent syntax error
 
       # Step 3: Set up the Node.js environment
       - name: Setup Node
