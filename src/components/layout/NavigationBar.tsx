@@ -5,92 +5,102 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from '@/context/ThemeContext'
 import { Sun, Moon, Github } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import AuthDialog from '../page-contents/AdditionalContents/AuthDialog'
 
 /**
- * NavigationBar component for the Bengali Text Summarizer application.
- * Handles theme toggling, authentication, and navigation.
+ * NavigationBar Component
+ * This component provides a navigation bar with theme toggling, GitHub link, and user authentication options.
+ * It dynamically updates based on theme (light or dark) and authentication state.
  */
 export default function NavigationBar() {
-  // Theme management
+  // Access and manage theme (light/dark) through custom theme context
   const { theme, setTheme } = useTheme()
 
-  // Authentication state
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [showAuthDialog, setShowAuthDialog] = useState(false)
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
+  // Authentication state variables
+  const [isLoggedIn, setIsLoggedIn] = useState(false) // Track if the user is logged in
+  const [showAuthDialog, setShowAuthDialog] = useState(false) // Control the visibility of the authentication dialog
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login') // Determine if login or registration mode is active
 
-  // Component mounting state to prevent hydration mismatch
+  // State to prevent hydration mismatch on initial load
   const [isMounted, setIsMounted] = useState(false)
 
-  // Effect to set mounted state after initial render
+  // Ensure mounted state after initial render to avoid SSR issues
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // Handler for opening the authentication dialog
+  // Open authentication dialog with specified mode (login/register)
   const handleAuth = useCallback((mode: 'login' | 'register') => {
     setAuthMode(mode)
     setShowAuthDialog(true)
   }, [])
 
-  // Handler for user logout
+  // Logout handler to update authentication state
   const handleLogout = useCallback(() => {
     setIsLoggedIn(false)
   }, [])
 
-  // Handler for logo click (page reload)
+  // Logo click handler to refresh page on logo click
   const handleLogoClick = useCallback(() => {
     if (isMounted) {
       window.location.reload()
     }
   }, [isMounted])
 
-  // Handler for toggling the theme
+  // Theme toggle handler to switch between light and dark themes
   const toggleTheme = useCallback(() => {
     setTheme(theme === 'light' ? 'dark' : 'light')
   }, [setTheme, theme])
 
   return (
     <>
-      <nav className="border-b px-6 h-20 flex items-center justify-between">
-        {/* Logo and title */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
-          <Image 
-            src="/images/bts-logo.png" 
-            alt="Bengali Text Summarizer Logo" 
-            width={40} 
-            height={40} 
+      <nav className='border-b px-6 h-20 flex items-center justify-between bg-white dark:bg-gray-900'>
+        {/* Logo and application title */}
+        <div className='flex items-center gap-2 cursor-pointer' onClick={handleLogoClick}>
+          <Image
+            src='/images/bts-logo.png'
+            alt='Bengali Text Summarizer Logo'
+            width={40}
+            height={40}
             priority
           />
-          <span className="font-semibold text-lg">Bengali Text Summarizer</span>
+          <span className='font-semibold text-lg text-gray-900 dark:text-gray-100'>
+            Bengali Text Summarizer
+          </span>
         </div>
-        
-        {/* Navigation items */}
-        <div className="flex items-center gap-4">
-          {/* GitHub repository link */}
+
+        {/* Right navigation items */}
+        <div className='flex items-center gap-4'>
+          {/* GitHub link with hover card tooltip */}
           <HoverCard>
             <HoverCardTrigger asChild>
-              <Link 
-                href="https://github.com/tashfiqul-islam/bengali-text-summarizer-website" 
-                target="_blank" 
-                rel="noopener noreferrer"
+              <Link
+                href='https://github.com/tashfiqul-islam/bengali-text-summarizer-website'
+                target='_blank'
+                rel='noopener noreferrer'
               >
-                <Button variant="ghost" size="icon" className="relative h-8 w-8 rounded-full">
-                  <Github className="h-4 w-4" />
-                  <span className="sr-only">GitHub Repository</span>
+                <Button
+                  className='relative h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
+                  aria-label='GitHub Repository'
+                >
+                  <Github className='h-4 w-4' />
                 </Button>
               </Link>
             </HoverCardTrigger>
-            <HoverCardContent className="w-80">
-              <div className="flex justify-between space-x-4">
-                <div className="space-y-1">
-                  <h4 className="text-sm font-semibold">GitHub Repository</h4>
-                  <p className="text-sm text-muted-foreground">
+            <HoverCardContent className='w-80'>
+              <div className='flex justify-between space-x-4'>
+                <div className='space-y-1'>
+                  <h4 className='text-sm font-semibold'>GitHub Repository</h4>
+                  <p className='text-sm text-muted-foreground'>
                     View the source code for Bengali Text Summarizer
                   </p>
                 </div>
@@ -101,40 +111,35 @@ export default function NavigationBar() {
           {/* Theme toggle button */}
           {isMounted && (
             <Button
-              variant="ghost"
-              size="icon"
               onClick={toggleTheme}
-              className="relative h-8 w-8 rounded-full"
+              className='relative h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
+              aria-label='Toggle theme'
             >
-              {theme === 'light' ? (
-                <Sun className="h-4 w-4 rotate-0 scale-100 transition-all" />
-              ) : (
-                <Moon className="h-4 w-4 rotate-0 scale-100 transition-all" />
-              )}
-              <span className="sr-only">Toggle theme</span>
+              {/* Conditional rendering of theme icons */}
+              {theme === 'light' ? <Sun className='h-4 w-4' /> : <Moon className='h-4 w-4' />}
             </Button>
           )}
 
-          {/* User menu dropdown */}
+          {/* User menu dropdown for login, logout, and register options */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/images/profile-avatar.png" alt="User avatar" />
-                  <AvatarFallback>U</AvatarFallback>
+              <Button
+                className='relative h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
+                aria-label='User menu'
+              >
+                {/* Avatar with fallback text */}
+                <Avatar className='h-8 w-8 ring-2 ring-gray-200 dark:ring-gray-500'>
+                  <AvatarImage src='/images/profile-avatar.png' alt='User avatar' />
+                  <AvatarFallback className='text-gray-800 dark:text-gray-300'>U</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align='end'>
               {isLoggedIn ? (
-                <DropdownMenuItem onClick={handleLogout}>
-                  Logout
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={() => handleAuth('login')}>
-                    Login
-                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAuth('login')}>Login</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleAuth('register')}>
                     Register
                   </DropdownMenuItem>
@@ -145,10 +150,10 @@ export default function NavigationBar() {
         </div>
       </nav>
 
-      {/* Authentication dialog */}
+      {/* Authentication dialog for login and registration */}
       {isMounted && (
-        <AuthDialog 
-          isOpen={showAuthDialog} 
+        <AuthDialog
+          isOpen={showAuthDialog}
           onClose={() => setShowAuthDialog(false)}
           onLogin={() => setIsLoggedIn(true)}
           initialMode={authMode}

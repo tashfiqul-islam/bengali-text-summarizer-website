@@ -26,7 +26,7 @@ export const StatCard: React.FC<StatCardProps> = ({ index }) => {
   const card = statsCards[index]
   const isPositive = card.change > 0
   const TrendIcon = isPositive ? TrendingUp : TrendingDown
-  const changeColor = isPositive ? 'text-emerald-500' : 'text-rose-500'
+  const changeColor = isPositive ? 'text-emerald-500' : 'text-emerald-500'
 
   return (
     <div className="h-full p-4 flex flex-col justify-between">
