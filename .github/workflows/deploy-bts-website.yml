@@ -1,24 +1,38 @@
 name: Deploy Bengali Text Summarizer
 
+# Workflow triggers
 on:
+  # Allows manual triggering of the workflow from GitHub Actions
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  # Automatically triggers when code is pushed to the main branch
+  # Specifically useful for deployments after merging PRs into main
+  push:
+    branches:
+      - main
 
+permissions:
+  contents: read # Allows reading repository contents
+  pages: write # Grants write access to GitHub Pages
+  id-token: write # Provides an ID token for authentication
+
+# Ensures that only one deployment job runs at a time
 concurrency:
-  group: 'pages'
+  group: 'pages' # Groups all pages jobs to prevent parallel runs
   cancel-in-progress: false
 
+# Build job for preparing the Next.js app for deployment
 jobs:
   build:
+    # Conditional execution: Runs only on main branch pushes or manual dispatch
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout repository code
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Step 2: Detect package manager to handle dependencies (npm or yarn)
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -35,19 +49,21 @@ jobs:
           else
             echo "Unable to determine package manager"
             exit 1
-          fi
 
+      # Step 3: Set up the Node.js environment
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
+      # Step 4: Configure GitHub Pages for static deployment
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
           static_site_generator: next
 
+      # Step 5: Restore cached build files for faster builds
       - name: Restore cache
         uses: actions/cache@v4
         with:
@@ -57,19 +73,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
 
+      # Step 6: Install dependencies using the detected package manager
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
+      # Step 7: Build the Next.js app, creating optimized static files for deployment
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
           NEXT_PUBLIC_BASE_URL: ${{ vars.NEXT_PUBLIC_BASE_URL }}
 
+      # Step 8: Upload the build artifacts for deployment to GitHub Pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
 
+  # Deployment job for publishing the site to GitHub Pages
   deploy:
     environment:
       name: github-pages
@@ -77,6 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      # Step 9: Deploy the artifacts to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -31,27 +31,23 @@ export const viewport: Viewport = {
 }
 
 // Root layout component
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} font-sans`}>
-      <body className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <html lang='en' className={`${inter.variable} font-sans`}>
+      <body className='antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'>
         {/* Theme provider for managing light/dark mode */}
-        <ThemeProvider defaultTheme="system" storageKey="bts-theme">
-          <div className="min-h-screen flex flex-col">
+        <ThemeProvider defaultTheme='system' storageKey='bts-theme'>
+          <div className='min-h-screen flex flex-col'>
             {/* Sticky navigation bar */}
-            <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md">
+            <header className='sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md'>
               <NavigationBar />
             </header>
             {/* Main content area */}
-            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <main className='flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-4'>
               {children}
             </main>
             {/* Footer with added padding and gap */}
-            <div className="mt-8 pt-6">
+            <div className='mt-8 pt-6'>
               <Footer />
             </div>
           </div>
