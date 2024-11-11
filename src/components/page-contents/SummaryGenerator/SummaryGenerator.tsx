@@ -1,14 +1,19 @@
 'use client'
 
 import React from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import Sidebar from './Sidebar'
-import MainContent from './MainContent'
 import { useSummaryGenerator } from '@/hooks/useSummaryGenerator'
+import { Card, CardContent } from '@/components/ui/card'
+import MainContent from './MainContent'
+import { Sidebar } from './Sidebar'
+import Header from './Header'
 
 /**
  * SummaryGenerator Component
- * Integrates the summarization hook and renders the UI components for the summary generator.
+ *
+ * This is the main container component for the Summary Generator application.
+ * It orchestrates the layout and data flow between the sidebar, header, and main content areas.
+ *
+ * @returns {React.ReactElement} The rendered SummaryGenerator component.
  */
 export default function SummaryGenerator() {
   const {
@@ -20,8 +25,8 @@ export default function SummaryGenerator() {
     currentSection,
     expandedCategory,
     isSidebarCollapsed,
-    isLoading, // Loading state for summary generation
-    error, // Error state for handling any errors during summary generation
+    isLoading,
+    error,
     handleGenerateSummary,
     handleUseArticle,
     handleSelectArticle,
@@ -31,31 +36,39 @@ export default function SummaryGenerator() {
   } = useSummaryGenerator()
 
   return (
-    <Card className='w-[100%] max-w-[calc(100vw-40px)] mx-auto my-6 shadow-lg overflow-hidden'>
-      <CardContent className='p-0'>
-        <div className='h-[500px] relative flex overflow-hidden rounded-[inherit]'>
+    <Card className='w-full max-w-[calc(100vw-40px)] mx-auto my-4 shadow-lg overflow-hidden'>
+      <CardContent className='p-0 max-h-[50vh] h-[50vh]'>
+        {' '}
+        {/* Set max height to 40% of viewport height */}
+        <div className='h-full relative flex overflow-hidden rounded-[inherit]'>
+          {/* Sidebar Component */}
           <Sidebar
             isSidebarCollapsed={isSidebarCollapsed}
             expandedCategory={expandedCategory}
-            handleEnterOwn={handleEnterOwn}
-            handleSelectArticle={handleSelectArticle}
-            toggleCategory={toggleCategory}
-            toggleSidebar={toggleSidebar}
+            handleEnterOwnAction={handleEnterOwn}
+            handleSelectArticleAction={handleSelectArticle}
+            toggleCategoryAction={toggleCategory}
           />
-          <MainContent
-            isSidebarCollapsed={isSidebarCollapsed}
-            toggleSidebar={toggleSidebar}
-            currentSection={currentSection}
-            selectedArticle={selectedArticle}
-            selectedArticleContent={selectedArticleContent}
-            articleText={articleText}
-            setArticleText={setArticleText}
-            summary={summary}
-            handleUseArticle={handleUseArticle}
-            handleGenerateSummary={handleGenerateSummary}
-            isLoading={isLoading} // Pass loading state to MainContent for loading indicator
-            error={error} // Pass error state to MainContent for error handling
-          />
+
+          {/* Main Content Area */}
+          <div className='flex-1 flex flex-col min-w-0'>
+            <Header
+              isSidebarCollapsed={isSidebarCollapsed}
+              toggleSidebarAction={toggleSidebar}
+              currentSection={currentSection}
+            />
+            <MainContent
+              articleText={articleText}
+              setArticleTextAction={setArticleText}
+              summary={summary}
+              selectedArticle={selectedArticle}
+              selectedArticleContent={selectedArticleContent}
+              handleUseArticleAction={handleUseArticle}
+              handleGenerateSummaryAction={handleGenerateSummary}
+              isLoading={isLoading}
+              error={error}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>

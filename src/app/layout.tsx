@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/context/ThemeContext'
 import NavigationBar from '@/components/layout/NavigationBar'
 import Footer from '@/components/layout/Footer'
+import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 // Optimize font loading using next/font
@@ -51,6 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Footer />
             </div>
           </div>
+          {/* Sonner Toaster for global notifications */}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
