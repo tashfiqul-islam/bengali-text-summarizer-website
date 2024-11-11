@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react'
+'use client'
+
+import { useState, useCallback, useEffect } from 'react'
 import { categories } from '@/lib/constants'
-import { CurrentSection } from '@/lib/types'
 
 // Define types for the expected API response structure
 type SummaryData = {
@@ -12,27 +13,45 @@ type ApiResponse = {
   data: SummaryData[]
 }
 
+// Define the structure for the current section
+type CurrentSection = {
+  category: string
+  article: string
+}
+
 /**
- * Custom hook for managing article text, summary generation, and related UI states.
- * Provides functionality for interacting with the summary generation API and handling UI state.
+ * Custom hook for managing the state and logic of the Summary Generator
+ *
+ * This hook provides functionality for:
+ * - Managing article text and generated summaries
+ * - Handling article selection and display
+ * - Managing sidebar state (expanded categories, collapse state)
+ * - Generating summaries via API calls
+ * - Error handling and loading states
  */
 export function useSummaryGenerator() {
-  // State variables for managing article text, summary, and selected article details
+  // State for managing article text and summary
   const [articleText, setArticleText] = useState('')
   const [summary, setSummary] = useState('')
+
+  // State for managing selected article
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null)
   const [selectedArticleContent, setSelectedArticleContent] = useState<string | null>(null)
+
+  // State for managing current section and sidebar
   const [currentSection, setCurrentSection] = useState<CurrentSection>({
     category: '',
     article: '',
   })
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+
+  // State for managing loading and error states
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   /**
-   * Resets the state of summary, selected article, and error when needed.
+   * Resets the state related to article selection and summary
    */
   const resetState = useCallback(() => {
     setSummary('')
@@ -42,7 +61,7 @@ export function useSummaryGenerator() {
   }, [])
 
   /**
-   * Function to send a POST request to the internal API route for summary generation.
+   * Sends a POST request to the internal API route for summary generation
    * @param articleText - The text of the article to be summarized
    * @returns The API response containing the summary text
    */
@@ -60,35 +79,32 @@ export function useSummaryGenerator() {
       throw new Error('Failed to fetch summary from API')
     }
 
-    const result: ApiResponse = await response.json()
-    return result
+    return await response.json()
   }, [])
 
   /**
-   * Generates the summary by calling the query function and updating the state accordingly.
+   * Generates a summary for the current article text
+   * Returns a boolean indicating success (true) or failure (false)
    */
-  const handleGenerateSummary = useCallback(async () => {
-    setIsLoading(true) // Set loading state to show progress indicator
-    setError(null) // Clear any previous error
+  const handleGenerateSummary = useCallback(async (): Promise<boolean> => {
+    setIsLoading(true)
+    setError(null)
 
     try {
-      // Call query function and set the summary state
       const result = await query(articleText)
-
-      // Extract `summary_text` from the first element of `data` array
-      const summaryText = result.data?.[0]?.summary_text || '' // Adjusted to match response structure
+      const summaryText = result.data?.[0]?.summary_text || ''
       setSummary(summaryText)
+      return true
     } catch (err) {
-      // Set error message for user feedback
-      setError('Failed to generate summary. Please try again.')
       console.error('Error generating summary:', err)
+      return false
     } finally {
-      setIsLoading(false) // Reset loading state
+      setIsLoading(false)
     }
   }, [articleText, query])
 
   /**
-   * Sets the article text and resets other states when using a selected article.
+   * Sets the article text to the content of the selected article
    */
   const handleUseArticle = useCallback(() => {
     if (selectedArticleContent) {
@@ -99,9 +115,9 @@ export function useSummaryGenerator() {
   }, [selectedArticleContent, resetState])
 
   /**
-   * Handles selecting an article from a category, updating the current section.
-   * @param category - The selected category name
-   * @param article - The selected article title
+   * Handles the selection of an article from the sidebar
+   * @param category - The category of the selected article
+   * @param article - The title of the selected article
    */
   const handleSelectArticle = useCallback(
     (category: string, article: string) => {
@@ -110,11 +126,9 @@ export function useSummaryGenerator() {
 
       if (selectedArticleData) {
         if (selectedArticle === article) {
-          // If the same article is selected again, reset the state
           resetState()
           setArticleText('')
         } else {
-          // Update state with the selected article details
           setSelectedArticle(article)
           setSelectedArticleContent(selectedArticleData.content)
           setArticleText('')
@@ -127,7 +141,7 @@ export function useSummaryGenerator() {
   )
 
   /**
-   * Clears current state to allow entering a new custom article.
+   * Resets the state to allow entering a new custom article
    */
   const handleEnterOwn = useCallback(() => {
     resetState()
@@ -136,21 +150,28 @@ export function useSummaryGenerator() {
   }, [resetState])
 
   /**
-   * Expands or collapses a category in the sidebar.
-   * @param category - The selected category name
+   * Toggles the expanded state of a category in the sidebar
+   * @param category - The category to toggle
    */
   const toggleCategory = useCallback((category: string) => {
     setExpandedCategory(prev => (prev === category ? null : category))
   }, [])
 
   /**
-   * Toggles the sidebar between collapsed and expanded states.
+   * Toggles the collapsed state of the sidebar
    */
   const toggleSidebar = useCallback(() => {
     setIsSidebarCollapsed(prev => !prev)
   }, [])
 
-  // Exposing necessary state and handlers for use in components
+  // Effect to clear error after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [error])
+
   return {
     articleText,
     setArticleText,

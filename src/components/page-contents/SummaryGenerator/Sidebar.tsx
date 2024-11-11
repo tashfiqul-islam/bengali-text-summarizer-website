@@ -1,104 +1,93 @@
+'use client'
+
 import React from 'react'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ChevronDown, ChevronRight, PenLine, FileText } from 'lucide-react'
-import { categories } from '../../../lib/constants'
+import { PenLine, FileText } from 'lucide-react'
+import { CategoryList } from './CategoryList'
 
 interface SidebarProps {
   isSidebarCollapsed: boolean
   expandedCategory: string | null
-  handleEnterOwn: () => void
-  handleSelectArticle: (category: string, article: string) => void
-  toggleCategory: (category: string) => void
-  toggleSidebar: () => void
+  handleEnterOwnAction: () => void
+  handleSelectArticleAction: (category: string, article: string) => void
+  toggleCategoryAction: (category: string) => void
 }
 
-export default function Sidebar({
+/**
+ * Sidebar Component
+ *
+ * This component renders the collapsible sidebar of the Summary Generator.
+ * It includes a header with a title, a button to enter custom text, and the CategoryList.
+ *
+ * @param {SidebarProps} props - The properties passed to this component.
+ * @returns {React.ReactElement} The rendered Sidebar component.
+ */
+export const Sidebar: React.FC<SidebarProps> = ({
   isSidebarCollapsed,
   expandedCategory,
-  handleEnterOwn,
-  handleSelectArticle,
-  toggleCategory,
-}: SidebarProps) {
+  handleEnterOwnAction,
+  handleSelectArticleAction,
+  toggleCategoryAction,
+}) => {
+  // Animation variants for sidebar expansion and collapse
+  const sidebarVariants = {
+    expanded: { width: '20rem' },
+    collapsed: { width: '4rem' },
+  }
+
   return (
-    <div
-      className={`border-r border-border transition-all duration-300 ease-in-out ${
-        isSidebarCollapsed ? 'w-16' : 'w-80'
-      }`}
+    <motion.div
+      className='border-r border-border bg-sidebar-background text-sidebar-foreground h-full'
+      variants={sidebarVariants}
+      animate={isSidebarCollapsed ? 'collapsed' : 'expanded'}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
+      {/* Sidebar Header */}
       <div
-        className={`h-[60px] px-4 border-b border-border sticky top-0 bg-background z-10 flex items-center ${
+        className={`h-[60px] px-4 border-b border-border sticky top-0 bg-sidebar-background z-10 flex items-center ${
           isSidebarCollapsed ? 'justify-center' : 'justify-start'
         }`}
       >
-        <FileText className='h-5 w-5 flex-shrink-0' />
-        <h2
-          className={`font-semibold whitespace-nowrap overflow-hidden transition-all duration-300 ${
-            isSidebarCollapsed ? 'w-0 opacity-0 ml-0' : 'w-auto opacity-100 ml-2'
+        <FileText className='h-5 w-5 text-sidebar-foreground' />
+        <motion.h2
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: isSidebarCollapsed ? 0 : 1, x: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className={`font-semibold ml-2 text-sidebar-foreground whitespace-nowrap ${
+            isSidebarCollapsed ? 'hidden' : 'block'
           }`}
         >
           Summary Generator
-        </h2>
+        </motion.h2>
       </div>
-      <ScrollArea className='h-[calc(600px-60px)]'>
-        <div className='p-4'>
+
+      {/* Sidebar Content */}
+      <ScrollArea className='h-[calc(100vh-60px)]'>
+        <div className='p-2'>
+          {' '}
+          {/* Reduced padding */}
+          {/* Button to Enter Custom Text */}
           <Button
             variant='outline'
-            className={`w-full transition-none ${
-              isSidebarCollapsed ? 'px-0 justify-center' : 'justify-start'
-            }`}
-            onClick={handleEnterOwn}
+            className={`w-full ${isSidebarCollapsed ? 'justify-center' : 'justify-start'} my-1`}
+            onClick={handleEnterOwnAction}
           >
-            <PenLine
-              className={`h-4 w-4 transition-none ${isSidebarCollapsed ? 'mx-0' : 'mr-2'}`}
-            />
-            <span className={`transition-none ${isSidebarCollapsed ? 'hidden' : 'inline'}`}>
-              Enter your own
-            </span>
+            <PenLine className={`h-4 w-4 ${isSidebarCollapsed ? 'mr-0' : 'mr-2'}`} />
+            {!isSidebarCollapsed && <span>Enter your own</span>}
           </Button>
-          {categories.map(category => (
-            <div key={category.name} className='mb-4 mt-4'>
-              <Button
-                variant='ghost'
-                className={`w-full transition-none ${
-                  isSidebarCollapsed ? 'px-0 justify-center' : 'justify-start'
-                }`}
-                onClick={() => toggleCategory(category.name)}
-              >
-                <category.icon
-                  className={`h-4 w-4 transition-none ${isSidebarCollapsed ? 'mx-0' : 'mr-2'}`}
-                />
-                <span
-                  className={`flex items-center transition-none ${
-                    isSidebarCollapsed ? 'hidden' : 'inline'
-                  }`}
-                >
-                  {category.name}
-                  {expandedCategory === category.name ? (
-                    <ChevronDown className='ml-auto h-4 w-4' />
-                  ) : (
-                    <ChevronRight className='ml-auto h-4 w-4' />
-                  )}
-                </span>
-              </Button>
-              {!isSidebarCollapsed && expandedCategory === category.name && (
-                <div className='ml-6 mt-2'>
-                  {category.articles.map(article => (
-                    <Button
-                      key={article.title}
-                      variant='ghost'
-                      className='w-full justify-start py-1 text-sm'
-                      onClick={() => handleSelectArticle(category.name, article.title)}
-                    >
-                      {article.title}
-                    </Button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+          {/* Category List */}
+          <div className='mt-2'>
+            <CategoryList
+              expandedCategory={expandedCategory}
+              toggleCategoryAction={toggleCategoryAction}
+              handleSelectArticleAction={handleSelectArticleAction}
+              isSidebarCollapsed={isSidebarCollapsed}
+            />
+          </div>
         </div>
       </ScrollArea>
-    </div>
+    </motion.div>
   )
 }
