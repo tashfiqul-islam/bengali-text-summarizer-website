@@ -1,9 +1,35 @@
-<h1>
-  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bts-logo-VzG76muLZBrru9cUAq2rTa3L5UueRC.svg" alt="Bengali Text Summarizer Logo" width="40" style="vertical-align: middle; margin-right: 10px;">
+<h1 align="center">
+  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bts-logo-VzG76muLZBrru9cUAq2rTa3L5UueRC.svg" alt="Bengali Text Summarizer Logo" width="50" style="vertical-align: middle; margin-right: 10px;">
   Bengali Text Summarizer
 </h1>
 
+<p align="center"><em>An advanced web application for efficiently summarizing Bengali news articles.</em></p>
 
+  <br>
+
+  <p align="center">
+  <img src="https://img.shields.io/badge/Python-3.9-blue?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-1.10-ee4c2c?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/NumPy-1.21-013243?style=flat-square&logo=numpy&logoColor=white" alt="NumPy">
+  <img src="https://img.shields.io/badge/Pandas-1.3-150458?style=flat-square&logo=pandas&logoColor=white" alt="Pandas">
+  <img src="https://img.shields.io/badge/Hugging%20Face-4.12-yellow?style=flat-square&logo=huggingface&logoColor=white" alt="Hugging Face">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Next-15.0.2-black?style=flat-squaree&logo=next.js&logoColor=white" alt="NextJS">
+  <img src="https://img.shields.io/badge/React-19.0.0-61DAFB?style=flat-square&logo=react&logoColor=blue" alt="React">
+  <img src="https://img.shields.io/badge/Node.js-20.11-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/NPM-10.9-CB3837?style=flat-square&logo=npm&logoColor=white" alt="NPM">
+  <img src="https://img.shields.io/badge/TypeScript-5.0-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/TailwindCSS-3.4.1-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="TailwindCSS">
+  <img src="https://img.shields.io/badge/framer_motion-11.11.11-ffca28?style=flat-square&logo=framer&logoColor=%23ffffff&color=%237178f6" alt="Framer Motion">
+  <img src="https://img.shields.io/badge/lucide-0.454.0-ffca28?style=flat-square&logo=lucide&logoColor=%23ffffff&color=F56565" alt="Lucide React">
+  <img src="https://img.shields.io/badge/zod-3.23.8-ffca28?style=flat-square&logo=zod&logoColor=%23ffffff&color=3E67B1" alt="Lucide React">
+  <img src="https://img.shields.io/badge/ESLint-15.0.2-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLin Next">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
+  </p>
+
+  <br>
 <h2>📚 Table of Contents</h2>
 <ul>
     <li><a href="#overview">🔍 Overview</a></li>
@@ -17,11 +43,6 @@
         <li><a href="#dataset-statistics">📊 Dataset Statistics</a></li>
         <li><a href="#model-code-snippet">💻 Model Code Snippet</a></li>
         <li><a href="#training-results">📈 Training Results</a></li>
-    </ul>
-    <li><a href="#tech-stack">🛠 Tech Stack</a></li>
-    <ul>
-        <li><a href="#model-tech-stack">Model Tech Stack</a></li>
-        <li><a href="#website-tech-stack">Website Tech Stack</a></li>
     </ul>
     <li><a href="#project-structure">📁 Project Structure</a></li>
     <li><a href="#installation">🚀 Installation</a></li>
@@ -160,24 +181,27 @@ tokenizer = MT5Tokenizer.from_pretrained(model_name)
 model = MT5ForConditionalGeneration.from_pretrained(model_name)
 
 # Tokenize the datasets
+
 train_inputs = tokenize_data(df_4_train, max_length=512, max_target_length=100)
 val_inputs = tokenize_data(df_4_val, max_length=512, max_target_length=100)
 test_inputs = tokenize_data(df_4_test, max_length=512, max_target_length=100)
 
 # Training arguments
+
 training_args = Seq2SeqTrainingArguments(
-    output_dir="./results",
-    eval_strategy="epoch",
-    learning_rate=1e-5,
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=8,
-    num_train_epochs=5,
-    weight_decay=0.01,
-    save_total_limit=2,
-    predict_with_generate=True,
-    save_safetensors=False
+output_dir="./results",
+eval_strategy="epoch",
+learning_rate=1e-5,
+per_device_train_batch_size=8,
+per_device_eval_batch_size=8,
+num_train_epochs=5,
+weight_decay=0.01,
+save_total_limit=2,
+predict_with_generate=True,
+save_safetensors=False
 )
 </code>
+
 </pre>
 
 <br>
@@ -222,57 +246,51 @@ training_args = Seq2SeqTrainingArguments(
 
 <br>
 
-<h2 id="tech-stack">🛠 Tech Stack</h2>
-
-<h3 id="model-tech-stack">Model Tech Stack</h3>
-<p>
-    <img src="https://img.shields.io/badge/Python-3.9-blue?style=flat-square&logo=python&logoColor=white" alt="Python" />
-    <img src="https://img.shields.io/badge/PyTorch-1.10-ee4c2c?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch" />
-    <img src="https://img.shields.io/badge/NumPy-1.21-013243?style=flat-square&logo=numpy&logoColor=white" alt="NumPy" />
-    <img src="https://img.shields.io/badge/Pandas-1.3-150458?style=flat-square&logo=pandas&logoColor=white" alt="Pandas" />
-    <img src="https://img.shields.io/badge/Hugging%20Face-4.12-yellow?style=flat-square&logo=huggingface&logoColor=white" alt="Hugging Face" />
-</p>
-
-<h3 id="website-tech-stack">Website Tech Stack</h3>
-<p>
-    <img src="https://img.shields.io/badge/Next.js-15.0-black?style=flat-square&logo=next.js&logoColor=white" alt="Next.js" />
-    <img src="https://img.shields.io/badge/React-19.0-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React" />
-    <img src="https://img.shields.io/badge/TypeScript-5.0-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="TailwindCSS" />
-    <img src="https://img.shields.io/badge/Node.js-20.11-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js" />
-    <img src="https://img.shields.io/badge/NPM-10.9-CB3837?style=flat-square&logo=npm&logoColor=white" alt="NPM" />
-    <img src="https://img.shields.io/badge/ESLint-8.0-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint" />
-</p>
-
-<br>
-
 <h2 id="project-structure">📁 Project Structure</h2>
 <pre>
 <code>
-├── public/
-│   └── images/
-├── src/
-│   ├── app/
-│   │   ├── fonts/
-│   │   ├── favicon.ico
-│   │   ├── globals.css
-│   │   ├── layout.tsx
-│   │   └── page.tsx
-│   ├── components/
-│   │   ├── layout/
-│   │   │   ├── Footer.tsx
-│   │   │   └── NavigationBar.tsx
-│   │   ├── page-contents/
-│   │   │   ├── AdditionalContents/
-│   │   │   └── SummaryGenerator/
-│   │   └── ui/ (shadcn/ui components)
-│   ├── context/
-│   │   └── ThemeContext.ts
-│   ├── hooks/
-│   │   └── use-mobile.tsx
-│   └── lib/
-│       └── utils.ts
-└── package.json
+src /
+├── app/
+│   ├── api/
+│   │   └── bts-summarize               // BTS summarization API endpoint
+│   ├── fonts                           // Custom fonts directory
+│   ├── globals.css                     // Global CSS styles
+│   ├── layout.tsx                      // Root layout component
+│   └── page.tsx                        // Home page component
+├── component/
+│   ├── layout/
+│   │   ├── footer.tsx                  // Footer component
+│   │   └── NavigationBar.tsx           // Navigation bar component
+│   ├── page-contents/
+│   │   ├── AdditionalContents/
+│   │   │   ├── AuthDialog.tsx          // User authentication dialog
+│   │   │   ├── FacultyAdvisor.tsx      // Faculty advisor details
+│   │   │   ├── ProjectMetadata.tsx     // Brings overview, stats, team members, and training data together
+│   │   │   ├── ProjectOverview.tsx     // Project overview section
+│   │   │   ├── StatsCard.tsx           // Statistical metrics card
+│   │   │   ├── TeamMembers.tsx         // Team members list
+│   │   │   └── TrainingChart.tsx       // Training data chart
+│   │   └── SummaryGenerator/
+│   │       ├── ArticleInput.tsx        // Input for articles to summarize
+│   │       ├── ArticleList.tsx         // List of articles
+│   │       ├── ArticleSummary.tsx      // Summarized article display
+│   │       ├── CategoryList.tsx        // Article category list
+│   │       ├── Header.tsx              // Header for Summary Generator
+│   │       ├── MainContent.tsx         // Main content area
+│   │       ├── Sidebar.tsx             // Sidebar navigation
+│   │       └── SummaryGenerator.tsx    // Main Summary Generator component
+│   └── ui                              // Shadcn UI components
+├── context/
+│   └── ThemeContext.tsx                // Theme context for app theming
+├── hooks/
+│   └── useSummaryGenerator.tsx         // Custom hook for Summary Generator
+└── lib/
+    ├── constants.ts                    // Application-wide constants
+    ├── errors.ts                       // Error handling utilities
+    ├── huggingface.ts                  // Hugging Face API utilities
+    ├── types.ts                        // TypeScript types and interfaces
+    ├── utils.ts                        // Utility functions
+    └── validation.ts                   // Data validation functions
 </code>
 </pre>
 
@@ -299,7 +317,6 @@ training_args = Seq2SeqTrainingArguments(
     <li>Click the "Summarize" button</li>
     <li>View the generated summary</li>
 </ol>
-
 
 <h2 id="license">📄 License</h2>
 <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
