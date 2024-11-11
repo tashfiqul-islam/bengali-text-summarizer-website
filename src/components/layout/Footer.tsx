@@ -12,16 +12,23 @@ export default function Footer() {
 
   return (
     <footer className='w-full mt-auto'>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='flex flex-col md:flex-row items-center justify-between'>
-          <div className='flex flex-col md:flex-row items-center justify-between'>
-            <p className='text-sm text-gray-400 mb-4 md:mb-0'>
-              © {currentYear} Bengali Text Summarizer. All rights reserved. | {version}
-            </p>
-          </div>
+      <div className='container mx-auto px-4 py-4'>
+        <div className='flex flex-col items-center justify-center'>
+          <p className='text-sm text-gray-400 text-center'>
+            &copy; {currentYear} | {version} | Made with{' '}
+            <span className='text-red-500'>&hearts;</span> by
+            <a
+              href='https://github.com/tashfiqul-islam'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-blue-500 hover:text-blue-700'
+            >
+              {' '}
+              Tashfiq
+            </a>
+          </p>
         </div>
       </div>
-      <div className='w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500'></div>
     </footer>
   )
 }

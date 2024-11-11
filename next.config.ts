@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   // Enable React Strict Mode for improved error handling and performance
@@ -6,23 +6,23 @@ const nextConfig: NextConfig = {
 
   // Output a standalone build for improved performance and easier deployment
   output: 'standalone',
-  
+
   // Configure image optimization
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "bengali-text-summarizer-website.vercel.app",
+        protocol: 'https',
+        hostname: 'bengali-text-summarizer-website.vercel.app',
       },
       {
-        protocol: "http",
-        hostname: "localhost",
+        protocol: 'http',
+        hostname: 'localhost',
       },
     ],
     // Enable runtime image optimization for better performance
     unoptimized: false,
   },
-  
+
   // Configure experimental features
   experimental: {
     // Enable Server Actions (stable feature in Next.js 14+)
@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
     // Enable CSS optimization for improved performance
     optimizeCss: true,
   },
-  
+
   // Set custom headers for improved security, caching, and to address Permissions-Policy issue
   async headers() {
     return [
@@ -44,28 +44,24 @@ const nextConfig: NextConfig = {
         source: '/(.*)',
         headers: [
           {
-            key: 'Permissions-Policy',
-            value: 'private-state-token-redemption=()'
-          },
-          {
             key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
+            value: 'max-age=63072000; includeSubDomains; preload',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'X-Frame-Options',
-            value: 'DENY'
+            value: 'DENY',
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            value: '1; mode=block',
           },
           {
             key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin',
           },
           {
             key: 'Cache-Control',
@@ -93,17 +89,17 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-    ];
+    ]
   },
 
   // Configure redirects (if needed)
   async redirects() {
-    return [];
+    return []
   },
 
   // Configure rewrites (if needed)
   async rewrites() {
-    return [];
+    return []
   },
 
   // Disable the `X-Powered-By` header for security
@@ -116,6 +112,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, WandSparkles, XCircle, CheckCircle } from 'lucide-react'
+import { Sparkles, WandSparkles, XCircle, CheckCircle, Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
@@ -48,10 +48,20 @@ export default function MainContent({
   const [dots, setDots] = useState('')
   const [generationTime, setGenerationTime] = useState(0)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
+  const [showCelebration, setShowCelebration] = useState(false)
+  const [celebrationTimer, setCelebrationTimer] = useState<NodeJS.Timeout | null>(null)
 
   // Sound effects for success and failure scenarios
   const [playSuccessSound] = useSound('/success.mp3')
   const [playFailSound] = useSound('/fail.mp3')
+
+  // Constants for character requirements
+  const minChars = 200
+  const maxChars = 5000
+  const charCount = articleText.length
+  const isMinReached = charCount >= minChars
+  const isMaxReached = charCount >= maxChars
 
   // Effect to manage loading dots animation while the summary is generating
   useEffect(() => {
@@ -64,6 +74,39 @@ export default function MainContent({
       setDots('')
     }
   }, [isLoading])
+
+  // Effect to handle typing state
+  useEffect(() => {
+    const timer = setTimeout(() => setIsTyping(false), 500)
+    return () => clearTimeout(timer)
+  }, [articleText])
+
+  // Effect to handle "Minimum requirement satisfied" notification
+  useEffect(() => {
+    // Clear any existing timer if character count goes below minimum
+    if (!isMinReached) {
+      setShowCelebration(false)
+      if (celebrationTimer) {
+        clearTimeout(celebrationTimer)
+        setCelebrationTimer(null)
+      }
+    } else if (isMinReached && !showCelebration) {
+      // If minimum requirement is reached and celebration is not currently shown
+      setShowCelebration(true)
+
+      // Set a 3-second timer to hide the celebration message
+      const timer = setTimeout(() => {
+        setShowCelebration(false)
+      }, 3000)
+
+      setCelebrationTimer(timer)
+    }
+
+    // Cleanup timer on unmount or when minimum requirement changes
+    return () => {
+      if (celebrationTimer) clearTimeout(celebrationTimer)
+    }
+  }, [isMinReached, celebrationTimer, showCelebration])
 
   // Animation variants for the summary display section
   const summaryVariants = {
@@ -108,7 +151,6 @@ export default function MainContent({
         })
         toast.success(
           <div className='flex items-center gap-2'>
-            {' '}
             <CheckCircle className='text-green-500' />
             <div>
               <strong>Success!</strong>
@@ -124,7 +166,6 @@ export default function MainContent({
         playFailSound()
         toast.error(
           <div className='flex items-center gap-2'>
-            {' '}
             <XCircle className='text-red-500' />
             <div>
               <strong>Failed!</strong>
@@ -142,7 +183,6 @@ export default function MainContent({
       playFailSound()
       toast.error(
         <div className='flex items-center gap-2'>
-          {' '}
           <XCircle className='text-red-500' />
           <div>
             <strong>Failed!</strong>
@@ -210,16 +250,92 @@ export default function MainContent({
         <div className='h-full flex flex-col'>
           <div className='flex-1 flex flex-col min-h-0'>
             <h2 className='text-xl font-semibold text-foreground mb-4'>Enter an article</h2>
-            <div className='flex-1 min-h-0'>
+            <div className='flex-1 min-h-0 relative'>
               <Textarea
                 value={articleText}
-                onChange={e => setArticleTextAction(e.target.value)}
+                onChange={e => {
+                  setArticleTextAction(e.target.value)
+                  setIsTyping(true)
+                }}
                 placeholder='Enter your Bengali article here...'
                 className='h-full resize-none font-bengali border-input transition-all duration-300 focus:ring-2 focus:ring-primary'
+                maxLength={maxChars}
               />
+              <AnimatePresence>
+                {isTyping && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className='absolute bottom-4 right-4 bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs font-medium'
+                  >
+                    <Pencil className='inline-block w-3 h-3 mr-1' />
+                    Typing...
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
-          <div className='mt-6'>
+          <div className='mt-4 space-y-3'>
+            <div className='flex justify-between items-center text-sm'>
+              <span className='text-muted-foreground'>
+                {charCount} / {maxChars} characters
+              </span>
+              <AnimatePresence>
+                {showCelebration && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className='flex items-center space-x-1 bg-green-500 text-white px-2 py-0.5 rounded-full'
+                  >
+                    <CheckCircle className='w-3 h-3' />
+                    <span className='text-xs'>Min. requirement met</span>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 0.5, repeat: Infinity, ease: 'linear' }}
+                    >
+                      <Sparkles className='w-3 h-3' />
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div className='space-y-2'>
+              <div className='relative h-2 overflow-hidden rounded-full bg-gray-300 dark:bg-gray-700'>
+                {/* Base progress bar (black/white) */}
+                <div
+                  className='absolute left-0 top-0 h-full bg-black transition-all duration-500 ease-in-out dark:bg-white'
+                  style={{
+                    width: `${Math.min((charCount / minChars) * 100, 100)}%`,
+                  }}
+                />
+                {/* Blue overlay bar */}
+                {charCount > minChars && (
+                  <div
+                    className='absolute left-0 top-0 h-full bg-blue-600 transition-all duration-500 ease-in-out dark:bg-blue-400'
+                    style={{
+                      width: `${((charCount - minChars) / (maxChars - minChars)) * 100}%`,
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+
+            <AnimatePresence>
+              {!isMinReached && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className='text-xs text-gray-800 dark:text-gray-200'
+                >
+                  {minChars - charCount} more characters needed to generate summary
+                </motion.p>
+              )}
+            </AnimatePresence>
+
             <Button
               onClick={handleGenerate}
               className={cn(
@@ -229,7 +345,7 @@ export default function MainContent({
                   'animate-pulse': isLoading,
                 }
               )}
-              disabled={isLoading}
+              disabled={isLoading || !isMinReached || isMaxReached}
             >
               <span className='relative z-10 flex items-center justify-center'>
                 <Sparkles className={cn('mr-2 h-4 w-4', { 'animate-spin': isLoading })} />
