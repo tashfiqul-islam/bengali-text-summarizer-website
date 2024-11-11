@@ -265,7 +265,7 @@ src /
 │   │   ├── AdditionalContents/
 │   │   │   ├── AuthDialog.tsx          // User authentication dialog
 │   │   │   ├── FacultyAdvisor.tsx      // Faculty advisor details
-│   │   │   ├── ProjectMetadata.tsx     // Brings overview, stats, team members, and training data together
+│   │   │   ├── ProjectMetadata.tsx     // Brings back project metadata together
 │   │   │   ├── ProjectOverview.tsx     // Project overview section
 │   │   │   ├── StatsCard.tsx           // Statistical metrics card
 │   │   │   ├── TeamMembers.tsx         // Team members list
