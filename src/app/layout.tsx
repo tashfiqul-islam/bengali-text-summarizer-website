@@ -41,16 +41,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className='min-h-screen flex flex-col'>
             {/* Sticky navigation bar */}
             <header className='sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md'>
-              <NavigationBar />
+              <div className='max-w-7xl mx-auto'>
+                <NavigationBar />
+              </div>
             </header>
             {/* Main content area */}
-            <main className='flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-4'>
-              {children}
+            <main className='flex-grow'>
+              <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>{children}</div>
             </main>
             {/* Footer with added padding and gap */}
-            <div className='mt-8 pt-6'>
-              <Footer />
-            </div>
+
+            <Footer />
           </div>
           {/* Sonner Toaster for global notifications */}
           <Toaster />

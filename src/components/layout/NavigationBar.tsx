@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { motion, AnimatePresence } from 'framer-motion'
-import AuthDialog from '../page-contents/AdditionalContents/AuthDialog'
+import AuthDialog from '@/components/page-contents/AdditionalContents/AuthDialog'
 
 /**
  * NavigationBar Component
