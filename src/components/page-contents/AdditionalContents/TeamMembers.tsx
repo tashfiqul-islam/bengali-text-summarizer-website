@@ -94,7 +94,6 @@ export default function TeamMembers() {
                   src={member.image}
                   alt={member.name}
                   fill
-                  sizes='32px'
                   className='rounded-full object-cover'
                 />
               </div>
