@@ -78,7 +78,7 @@ function ProfileImage({ image, name }: { image: string; name: string }) {
     <div className='relative w-16 h-16 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0'>
       <div className='absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 animate-gradient' />
       <div className='absolute inset-[2px] rounded-lg overflow-hidden bg-white dark:bg-gray-900'>
-        <Image src={image} alt={name} fill sizes='32px' className='object-cover' priority />
+        <Image src={image} alt={name} fill className='object-cover' priority />
       </div>
     </div>
   )
