@@ -89,6 +89,19 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: '/:path*.mp3',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'audio/mpeg',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ]
   },
 

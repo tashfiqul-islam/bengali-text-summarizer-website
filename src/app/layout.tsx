@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import NavigationBar from '@/components/layout/NavigationBar'
 import Footer from '@/components/layout/Footer'
 import { Toaster } from '@/components/ui/sonner'
+import { AnimatePresence } from 'framer-motion'
 import './globals.css'
 
 // Optimize font loading using next/font
@@ -34,26 +35,22 @@ export const viewport: Viewport = {
 // Root layout component
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en' className={`${inter.variable} font-sans`}>
-      <body className='antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'>
-        {/* Theme provider for managing light/dark mode */}
-        <ThemeProvider defaultTheme='system' storageKey='bts-theme'>
+    <html lang='en' suppressHydrationWarning>
+      <body
+        className={`${inter.variable} font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
+      >
+        <ThemeProvider defaultTheme='system'>
           <div className='min-h-screen flex flex-col'>
-            {/* Sticky navigation bar */}
-            <header className='sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md'>
-              <div className='max-w-7xl mx-auto'>
-                <NavigationBar />
-              </div>
+            <header className='sticky top-0 z-50'>
+              <NavigationBar />
             </header>
-            {/* Main content area */}
             <main className='flex-grow'>
-              <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>{children}</div>
+              <AnimatePresence mode='wait'>
+                <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>{children}</div>
+              </AnimatePresence>
             </main>
-            {/* Footer with added padding and gap */}
-
             <Footer />
           </div>
-          {/* Sonner Toaster for global notifications */}
           <Toaster />
         </ThemeProvider>
       </body>

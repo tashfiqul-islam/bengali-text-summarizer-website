@@ -1,14 +1,19 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, WandSparkles, XCircle, CheckCircle, Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import confetti from 'canvas-confetti'
-import { useSound } from 'use-sound'
-import { toast } from 'sonner'
+import { ArticleInput } from './MainContent/ArticleInput'
+import { SummaryDisplay } from './MainContent/SummaryDisplay'
+import {
+  useLoadingDots,
+  useTypingEffect,
+  useCelebrationEffect,
+  handleGenerate,
+} from './MainContent/SummaryControls'
+import { useCustomSound } from '@/hooks/useCustomSound'
+import { minChars, maxChars, funPhrases } from '@/lib/constants'
 
 interface MainContentProps {
   articleText: string
@@ -25,12 +30,10 @@ interface MainContentProps {
 /**
  * MainContent Component
  *
- * This component is the main interface for the Summary Generator.
- * It allows users to enter or select an article, generate a summary, and view the results.
- * Includes error handling, sound effects, success/failure notifications, and animations.
- *
- * @param {MainContentProps} props - The properties passed to this component.
- * @returns {React.ReactElement} The rendered MainContent component.
+ * Handles the main content area for:
+ * - Article input and validation.
+ * - Summary generation logic with sound and visual feedback.
+ * - Displaying the generated summary.
  */
 export default function MainContent({
   articleText,
@@ -42,195 +45,46 @@ export default function MainContent({
   handleGenerateSummaryAction,
   isLoading,
   error,
-}: MainContentProps) {
-  // UI states for summary visibility, loading dots animation, and success status
-  const [isSummaryVisible, setIsSummaryVisible] = useState(false)
-  const [dots, setDots] = useState('')
-  const [generationTime, setGenerationTime] = useState(0)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [isTyping, setIsTyping] = useState(false)
-  const [showCelebration, setShowCelebration] = useState(false)
-  const [celebrationTimer, setCelebrationTimer] = useState<NodeJS.Timeout | null>(null)
+}: MainContentProps): React.ReactElement {
+  const [isSummaryVisible, setIsSummaryVisible] = useState(false) // Summary visibility state
+  const [generationTime, setGenerationTime] = useState(0) // Time taken for summary generation
+  const [isSuccess, setIsSuccess] = useState(false) // Success or failure state for summary generation
 
-  // Sound effects for success and failure scenarios
-  const [playSuccessSound] = useSound('/success.mp3')
-  const [playFailSound] = useSound('/fail.mp3')
+  // Initialize sound hooks for success and failure
+  const [playSuccessSound] = useCustomSound('/success.mp3')
+  const [playFailSound] = useCustomSound('/fail.mp3')
 
-  // Constants for character requirements
-  const minChars = 200
-  const maxChars = 5000
+  // Character count and input validation
   const charCount = articleText.length
   const isMinReached = charCount >= minChars
   const isMaxReached = charCount >= maxChars
 
-  // Effect to manage loading dots animation while the summary is generating
-  useEffect(() => {
-    if (isLoading) {
-      const interval = setInterval(() => {
-        setDots(prev => (prev.length < 3 ? prev + '.' : ''))
-      }, 500)
-      return () => clearInterval(interval)
-    } else {
-      setDots('')
-    }
-  }, [isLoading])
+  // Hooks for UI animations and effects
+  const dots = useLoadingDots(isLoading)
+  const { isTyping, setIsTyping } = useTypingEffect(articleText)
+  const { showCelebration } = useCelebrationEffect(isMinReached)
 
-  // Effect to handle typing state
-  useEffect(() => {
-    const timer = setTimeout(() => setIsTyping(false), 500)
-    return () => clearTimeout(timer)
-  }, [articleText])
-
-  // Effect to handle "Minimum requirement satisfied" notification
-  useEffect(() => {
-    // Clear any existing timer if character count goes below minimum
-    if (!isMinReached) {
-      setShowCelebration(false)
-      if (celebrationTimer) {
-        clearTimeout(celebrationTimer)
-        setCelebrationTimer(null)
-      }
-    } else if (isMinReached && !showCelebration) {
-      // If minimum requirement is reached and celebration is not currently shown
-      setShowCelebration(true)
-
-      // Set a 3-second timer to hide the celebration message
-      const timer = setTimeout(() => {
-        setShowCelebration(false)
-      }, 3000)
-
-      setCelebrationTimer(timer)
-    }
-
-    // Cleanup timer on unmount or when minimum requirement changes
-    return () => {
-      if (celebrationTimer) clearTimeout(celebrationTimer)
-    }
-  }, [isMinReached, celebrationTimer, showCelebration])
-
-  // Animation variants for the summary display section
-  const summaryVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.1, 0.25, 1],
-      },
-    },
-  }
+  // Select a random motivational phrase for successful generation
+  const randomPhrase = funPhrases[Math.floor(Math.random() * funPhrases.length)]
 
   /**
-   * handleGenerate - Handles the summary generation process
-   *
-   * - Triggers the summary generation API call and manages UI state.
-   * - Plays the appropriate sound and displays success or failure notifications.
-   * - Shows a confetti animation on success.
+   * Wrapper function to handle the summary generation process.
+   * Includes sound effects and celebratory visuals.
    */
-  const handleGenerate = useCallback(async () => {
-    setIsSummaryVisible(true)
-    setIsSuccess(false) // Reset success flag before starting
-    const startTime = Date.now()
-
-    try {
-      // Attempt to generate summary and capture the success status
-      const success = await handleGenerateSummaryAction()
-      setIsSuccess(success)
-
-      const endTime = Date.now()
-      setGenerationTime((endTime - startTime) / 1000)
-
-      if (success) {
-        // Play success sound, show confetti, and display success toast if successful
-        playSuccessSound()
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-        })
-        toast.success(
-          <div className='flex items-center gap-2'>
-            <CheckCircle className='text-green-500' />
-            <div>
-              <strong>Success!</strong>
-              <p className='text-sm'>Summary successfully generated.</p>
-            </div>
-          </div>,
-          {
-            duration: 10000,
-          }
-        )
-      } else {
-        // Play failure sound and show failure toast if generation failed
-        playFailSound()
-        toast.error(
-          <div className='flex items-center gap-2'>
-            <XCircle className='text-red-500' />
-            <div>
-              <strong>Failed!</strong>
-              <p className='text-sm'>Failed to generate summary.</p>
-            </div>
-          </div>,
-          {
-            duration: 10000,
-          }
-        )
-      }
-    } catch (error) {
-      // Log error, play failure sound, and display error toast in case of exception
-      setIsSuccess(false)
-      playFailSound()
-      toast.error(
-        <div className='flex items-center gap-2'>
-          <XCircle className='text-red-500' />
-          <div>
-            <strong>Failed!</strong>
-            <p className='text-sm'>Failed to generate summary due to an issue.</p>
-          </div>
-        </div>,
-        {
-          duration: 10000,
-        }
-      )
-      console.error('Error in handleGenerate:', error)
-    }
-  }, [handleGenerateSummaryAction, playSuccessSound, playFailSound])
-
-  // Array of fun, Harry Potter-themed phrases to add character to the summary generation experience
-  const funPhrases = [
-    '🧙‍♂️ Accio Summary! Your Words, Summoned',
-    '✨ Wingardium Levi-summary! Floating Knowledge Ahead',
-    '🦉 Owl Post! Your Summary Has Arrived',
-    "🔮 Divination Complete! Here's Your Crystal-Clear Insight",
-    '📜 Mischief Managed! Article Shortened with Style',
-    '🎩 Expecto Knowledge! Your Summary Has Appeared',
-    '💫 Reducio! Your Text, Magically Minimized',
-    '🌌 Lumos! Shedding Light on the Essence',
-    '🧹 Just Like a Quidditch Match – Swift and Precise!',
-    "⚡️ Stupefy! Here's a Stunning Summary",
-    '✨ Expelliarmus! Fluff Banished, Only Key Points Remain',
-    '🎇 Protego! Shielded from Unnecessary Details',
-    "🦄 Felix Felicis! You've Got a Potent Dose of Clarity",
-    "✨ Reparo! We've Pieced Together the Best Bits",
-    '🧪 Polyjuice Potion Applied – Original, Now Transformed',
-    '🔮 Riddikulus! No More Confusion, Just Pure Insight',
-    '💡 Lumos Maxima! Illuminating the Core of Your Article',
-    '⚡️ Dobby Delivered! A Free Summary, Just for You',
-    '📚 The Pensieve Effect! Only the Best Memories Remain',
-    '🦉 Hedwig Approved! Your Summary is Here',
-    '✨ Conjured with Care: Your Magical Summary',
-    '🍫 Like a Chocolate Frog – Sweet and Brief!',
-    "⚡️ Alohomora! We've Unlocked the Essence",
-    '🎩 Just Like a Quick Trip to Diagon Alley!',
-    '✨ Petrificus Totalus! The Key Points, Frozen in Time',
-  ]
-
-  // Randomly select a phrase for each summary generation event
-  const randomPhrase = funPhrases[Math.floor(Math.random() * funPhrases.length)]
+  const handleGenerateWrapper = async () => {
+    await handleGenerate({
+      setIsSummaryVisibleAction: setIsSummaryVisible,
+      setIsSuccessAction: setIsSuccess,
+      handleGenerateSummaryAction,
+      setGenerationTimeAction: setGenerationTime,
+      playSuccessSoundAction: playSuccessSound,
+      playFailSoundAction: playFailSound,
+    })
+  }
 
   return (
     <div className='flex-1 p-6 overflow-auto bg-background'>
+      {/* Display selected article if available */}
       {selectedArticle ? (
         <motion.div
           initial={{ opacity: 0 }}
@@ -248,96 +102,22 @@ export default function MainContent({
         </motion.div>
       ) : (
         <div className='h-full flex flex-col'>
-          <div className='flex-1 flex flex-col min-h-0'>
-            <h2 className='text-xl font-semibold text-foreground mb-4'>Enter an article</h2>
-            <div className='flex-1 min-h-0 relative'>
-              <Textarea
-                value={articleText}
-                onChange={e => {
-                  setArticleTextAction(e.target.value)
-                  setIsTyping(true)
-                }}
-                placeholder='Enter your Bengali article here...'
-                className='h-full resize-none font-bengali border-input transition-all duration-300 focus:ring-2 focus:ring-primary'
-                maxLength={maxChars}
-              />
-              <AnimatePresence>
-                {isTyping && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className='absolute bottom-4 right-4 bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs font-medium'
-                  >
-                    <Pencil className='inline-block w-3 h-3 mr-1' />
-                    Typing...
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
+          {/* Article input component */}
+          <ArticleInput
+            articleText={articleText}
+            setArticleTextAction={setArticleTextAction}
+            isTyping={isTyping}
+            setIsTyping={setIsTyping}
+            charCount={charCount}
+            maxChars={maxChars}
+            showCelebration={showCelebration}
+            isMinReached={isMinReached}
+            minChars={minChars}
+          />
           <div className='mt-4 space-y-3'>
-            <div className='flex justify-between items-center text-sm'>
-              <span className='text-muted-foreground'>
-                {charCount} / {maxChars} characters
-              </span>
-              <AnimatePresence>
-                {showCelebration && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    className='flex items-center space-x-1 bg-green-500 text-white px-2 py-0.5 rounded-full'
-                  >
-                    <CheckCircle className='w-3 h-3' />
-                    <span className='text-xs'>Min. requirement met</span>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 0.5, repeat: Infinity, ease: 'linear' }}
-                    >
-                      <Sparkles className='w-3 h-3' />
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <div className='space-y-2'>
-              <div className='relative h-2 overflow-hidden rounded-full bg-gray-300 dark:bg-gray-700'>
-                {/* Base progress bar (black/white) */}
-                <div
-                  className='absolute left-0 top-0 h-full bg-black transition-all duration-500 ease-in-out dark:bg-white'
-                  style={{
-                    width: `${Math.min((charCount / minChars) * 100, 100)}%`,
-                  }}
-                />
-                {/* Blue overlay bar */}
-                {charCount > minChars && (
-                  <div
-                    className='absolute left-0 top-0 h-full bg-blue-600 transition-all duration-500 ease-in-out dark:bg-blue-400'
-                    style={{
-                      width: `${((charCount - minChars) / (maxChars - minChars)) * 100}%`,
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-
-            <AnimatePresence>
-              {!isMinReached && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className='text-xs text-gray-800 dark:text-gray-200'
-                >
-                  {minChars - charCount} more characters needed to generate summary
-                </motion.p>
-              )}
-            </AnimatePresence>
-
+            {/* Generate Summary Button */}
             <Button
-              onClick={handleGenerate}
+              onClick={handleGenerateWrapper}
               className={cn(
                 'w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300',
                 'shadow-lg hover:shadow-xl group relative overflow-hidden',
@@ -348,13 +128,12 @@ export default function MainContent({
               disabled={isLoading || !isMinReached || isMaxReached}
             >
               <span className='relative z-10 flex items-center justify-center'>
-                <Sparkles className={cn('mr-2 h-4 w-4', { 'animate-spin': isLoading })} />
                 {isLoading ? `Generating${dots}` : 'Generate Summary'}
               </span>
               <span className='absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
             </Button>
 
-            {/* Error message display */}
+            {/* Error Message */}
             {error && (
               <motion.p
                 initial={{ opacity: 0 }}
@@ -365,53 +144,15 @@ export default function MainContent({
               </motion.p>
             )}
 
-            {/* Animated summary result display */}
+            {/* Display the generated summary */}
             <AnimatePresence>
               {summary && !isLoading && isSummaryVisible && (
-                <motion.div
-                  initial='hidden'
-                  animate='visible'
-                  exit='hidden'
-                  variants={summaryVariants}
-                  className='mt-12'
-                >
-                  <div className='relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 p-1'>
-                    <div className='absolute inset-0 bg-grid-white/10 [mask-image:radial-gradient(ellipse_at_center,#000_70%,transparent_100%)]' />
-                    <div className='relative rounded-[22px] bg-background/80 backdrop-blur-xl p-8 border border-white/10'>
-                      <div
-                        className={cn(
-                          'absolute top-4 right-4 rounded-full px-3 py-1 flex items-center space-x-1',
-                          isSuccess ? 'bg-green-500/20' : 'bg-red-500/20'
-                        )}
-                      >
-                        <WandSparkles
-                          className={cn('w-3 h-3', isSuccess ? 'text-green-500' : 'text-red-500')}
-                        />
-                        <span
-                          className={cn(
-                            'text-xs font-medium',
-                            isSuccess
-                              ? 'text-green-700 dark:text-green-300'
-                              : 'text-red-700 dark:text-red-300'
-                          )}
-                        >
-                          {isSuccess ? 'Obliviate!' : 'Confundus!'} in{' '}
-                          <em>{generationTime.toFixed(2)}s</em>
-                        </span>
-                      </div>
-                      <div className='flex flex-col items-center justify-between mb-8'>
-                        <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mb-4'>
-                          {randomPhrase}
-                        </h2>
-                      </div>
-                      <div className='relative font-bengali text-foreground text-center'>
-                        <div className='absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-blue-500/50 rounded-tl-lg' />
-                        <div className='absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-pink-500/50 rounded-br-lg' />
-                        <p className='leading-relaxed relative z-10'>{summary}</p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+                <SummaryDisplay
+                  summary={summary}
+                  isSuccess={isSuccess}
+                  generationTime={generationTime}
+                  randomPhrase={randomPhrase}
+                />
               )}
             </AnimatePresence>
           </div>

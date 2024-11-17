@@ -9,6 +9,37 @@ export interface Article {
   content: string
 }
 
+export const minChars = 200
+export const maxChars = 5000
+
+export const funPhrases = [
+  '🧙‍♂️ Accio Summary! Your Words, Summoned',
+  '✨ Wingardium Levi-summary! Floating Knowledge Ahead',
+  '🦉 Owl Post! Your Summary Has Arrived',
+  "🔮 Divination Complete! Here's Your Crystal-Clear Insight",
+  '📜 Mischief Managed! Article Shortened with Style',
+  '🎩 Expecto Knowledge! Your Summary Has Appeared',
+  '💫 Reducio! Your Text, Magically Minimized',
+  '🌌 Lumos! Shedding Light on the Essence',
+  '🧹 Just Like a Quidditch Match – Swift and Precise!',
+  "⚡️ Stupefy! Here's a Stunning Summary",
+  '✨ Expelliarmus! Fluff Banished, Only Key Points Remain',
+  '🎇 Protego! Shielded from Unnecessary Details',
+  "🦄 Felix Felicis! You've Got a Potent Dose of Clarity",
+  "✨ Reparo! We've Pieced Together the Best Bits",
+  '🧪 Polyjuice Potion Applied – Original, Now Transformed',
+  '🔮 Riddikulus! No More Confusion, Just Pure Insight',
+  '💡 Lumos Maxima! Illuminating the Core of Your Article',
+  '⚡️ Dobby Delivered! A Free Summary, Just for You',
+  '📚 The Pensieve Effect! Only the Best Memories Remain',
+  '🦉 Hedwig Approved! Your Summary is Here',
+  '✨ Conjured with Care: Your Magical Summary',
+  '🍫 Like a Chocolate Frog – Sweet and Brief!',
+  "⚡️ Alohomora! We've Unlocked the Essence",
+  '🎩 Just Like a Quick Trip to Diagon Alley!',
+  '✨ Petrificus Totalus! The Key Points, Frozen in Time',
+]
+
 /**
  * Represents a category with a name, icon, and list of articles.
  */
