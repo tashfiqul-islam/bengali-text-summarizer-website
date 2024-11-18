@@ -24,11 +24,17 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
+      <head>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+      </head>
       <body
         className={`${inter.variable} font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
       >
-        {/* Wrapping the content with the ClientWrapper */}
-        <ClientWrapper>{children}</ClientWrapper>
+        {/* Wrapper for managing context and states */}
+        <ClientWrapper>
+          {/* Main application content */}
+          <main className='min-h-screen flex flex-col'>{children}</main>
+        </ClientWrapper>
       </body>
     </html>
   )

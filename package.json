@@ -41,6 +41,7 @@
     "lucide-react": "^0.454.0",
     "next": "^15.0.3",
     "next-themes": "^0.4.3",
+    "playwright": "^1.49.0",
     "puppeteer": "^23.8.0",
     "react": "19.0.0-rc-4d577fd2-20241104",
     "react-dom": "19.0.0-rc-4d577fd2-20241104",
