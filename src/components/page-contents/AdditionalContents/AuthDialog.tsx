@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from "next/image";
 import { Github } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -35,7 +35,7 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
   }, [onLogin, onClose]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[1000px] p-0 overflow-hidden">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         <div className="grid lg:grid-cols-2 gap-0">
@@ -44,11 +44,15 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
             <Image
               src="/images/7.jpg"
               alt="Background"
-              layout="fill"
-              objectFit="cover"
               quality={100}
               priority
-            />
+              fill
+              sizes="100vw"
+              style={{
+                objectFit: "cover",
+                maxWidth: "100%",
+                height: "auto"
+              }} />
             <div className="absolute bottom-8 left-8 right-8 bg-white/10 p-4 rounded backdrop-blur-sm">
               <p className="text-sm font-medium text-white">
                 <em>&quot;AI is a tool. The choice about how it gets deployed is ours.&quot; — Oren Etzioni</em>
@@ -171,6 +175,6 @@ export default function AuthDialog({ isOpen, onClose, onLogin, initialMode }: Au
           </div>
         </div>
       </DialogContent>
-    </Dialog>
+    </Dialog>)
   );
 }
