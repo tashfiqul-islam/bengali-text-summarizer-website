@@ -4,7 +4,11 @@ import { Badge } from '@/components/ui/badge'
 import { Code2, Server, Globe } from 'lucide-react'
 import { techStack } from '@/lib/constants'
 
-export function RightColumn() {
+interface RightColumnProps {
+  className?: string
+}
+
+export const RightColumn: React.FC<RightColumnProps> = ({ className }) => {
   return (
     <div className='w-[30%] space-y-6'>
       {/* Tech Stack */}

@@ -1,107 +1,129 @@
-'use client'
-
-import React from 'react'
+import {
+  Calendar,
+  MapPin,
+  Users,
+  GraduationCap,
+  Cpu,
+  Code,
+  Scale,
+  Type,
+  Clock,
+  FileText,
+} from 'lucide-react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { User, GraduationCap, BookOpen, IdCard } from 'lucide-react'
-import { students } from '@/lib/constants'
 
-export default function Header() {
+const students = [
+  { name: 'Md Tashfiqul Islam', id: '161 1593 042' },
+  { name: 'Tashin Mahmud Khan', id: '201 1819 042' },
+  { name: 'Amir Hamja Marjan', id: '202 1171 642' },
+  { name: 'Md Simul Hossain', id: '171 1949 642' },
+]
+
+const metrics = [
+  { icon: Cpu, label: 'Model Size', value: '300M params' },
+  { icon: Code, label: 'Tensor Type', value: 'F32' },
+  { icon: Scale, label: 'Base Model', value: 'google/mt5-small' },
+  { icon: Type, label: 'Type', value: 'Seq2Seq' },
+  { icon: Clock, label: 'Training Length', value: '210 Epochs' },
+  { icon: FileText, label: 'License', value: 'MIT' },
+]
+
+const tags = ['Summarization', 'Transformers', 'PyTorch', 'Bengali', 'mt5', 'text2text-generation']
+
+export function Header() {
   return (
-    <motion.header
-      className='relative w-full rounded-2xl overflow-hidden shadow-md print:shadow-none'
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      {/* Background Image */}
-      <div className='absolute inset-0 w-full h-full'>
+    <div className='w-full h-full bg-gradient-to-r from-blue-50 to-indigo-50 p-6 flex'>
+      {/* Left Column */}
+      <div className='w-1/4 flex flex-col items-center justify-between border-r border-blue-200 pr-6'>
         <Image
-          src='/images/ai-bg.jpg'
-          alt='AI Background'
-          fill
-          priority
-          className='object-cover opacity-[0.15] print:opacity-[0.05]'
+          src='/images/logos/nsu-logo.svg'
+          alt='NSU Logo'
+          width={150}
+          height={150}
           quality={100}
-          sizes='100vw'
+          className='mb-4'
         />
+        <div className='text-center'>
+          <h2 className='text-[48px] font-bold text-blue-800 mb-2'>CSE499B.16</h2>
+          <div className='flex items-center justify-center text-[24px] text-gray-600'>
+            <Calendar className='w-6 h-6 mr-2' />
+            Summer 2024
+          </div>
+        </div>
+        <div className='text-center text-[24px] text-gray-600'>
+          <div className='font-medium mb-1'>Department of ECE</div>
+          <div className='flex items-center justify-center'>
+            <MapPin className='w-6 h-6 mr-2' />
+            North South University
+          </div>
+        </div>
       </div>
 
-      <div className='relative z-10 p-6 sm:p-8 md:p-10 lg:p-12'>
-        <div className='flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8'>
-          <div className='flex items-center mb-6 lg:mb-0'>
-            <Image
-              src='/images/logos/nsu-logo.png'
-              alt='NSU Logo'
-              width={150}
-              height={150}
-              className='rounded-xl'
-              priority
-              quality={100}
-              sizes='(max-width: 768px) 120px, (max-width: 1024px) 160px, 180px'
-            />
-            <div className='ml-6 flex flex-col justify-center h-[180px]'>
-              <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-none'>
-                Bengali Text <br />
-                <span className='bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent'>
-                  Summarization System
-                </span>
-              </h1>
-            </div>
-          </div>
-          <div className='flex flex-col items-end space-y-3'>
-            <motion.div
-              className='bg-blue-700 text-white text-sm sm:text-base font-bold px-4 py-2 rounded-full shadow-sm print:shadow-none'
-              whileHover={{ scale: 1.05 }}
-            >
-              CSE499B.16
-            </motion.div>
-            <div className='flex items-center text-right'>
-              <BookOpen className='w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2' />
-              <p className='text-sm sm:text-base font-medium text-slate-700'>
-                Group: Bytes of Bengal
-              </p>
-            </div>
-            <div className='flex items-start text-right bg-blue-50 rounded-lg p-2 shadow-sm print:shadow-none'>
-              <GraduationCap className='w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2 mt-1' />
-              <div>
-                <p className='text-sm sm:text-base font-bold text-slate-800'>
-                  Supervisor: Dr. Nafisa Noor [NaNr]
-                </p>
-                <p className='text-xs sm:text-sm text-slate-600'>Assistant Professor</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='mb-6'>
-          <p className='text-base sm:text-lg md:text-xl font-semibold text-slate-800'>
-            Department of Electrical & Computer Engineering
+      {/* Middle Column */}
+      <div className='w-1/2 flex flex-col justify-between px-6'>
+        <div className='text-center'>
+          <h1 className='text-[60px] font-bold text-blue-900 mb-8'>Senior Design Showcase</h1>
+          <h2 className='text-[52px] font-bold text-blue-700 mb-6'>
+            Bengali Text Summarization System
+          </h2>
+          <p className='text-[32px] text-gray-700 mb-8'>
+            Transforming lengthy Bengali articles into concise summaries using advanced NLP
+            techniques
           </p>
-          <p className='text-sm sm:text-base md:text-lg text-slate-600'>North South University</p>
         </div>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
-          {students.map((student, index) => (
-            <motion.div
+        <div className='flex flex-wrap justify-center gap-4 mb-8'>
+          {tags.map((tag, index) => (
+            <span
               key={index}
-              className='bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm rounded-lg p-3 shadow-sm print:shadow-none'
-              whileHover={{ scale: 1.02 }}
+              className='bg-blue-100 text-blue-800 text-[24px] font-medium px-4 py-2 rounded-full'
             >
-              <div className='flex items-center mb-2'>
-                <User className='w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2' />
-                <h3 className='font-semibold text-slate-800 text-sm sm:text-base'>
-                  {student.name}
-                </h3>
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className='grid grid-cols-3 gap-4 w-full'>
+          {metrics.map((metric, index) => (
+            <div key={index} className='flex items-center bg-white rounded-lg p-3 shadow-sm'>
+              <metric.icon className='w-10 h-10 text-blue-600 mr-3' />
+              <div>
+                <div className='text-[20px] font-medium text-blue-800'>{metric.label}</div>
+                <div className='text-[18px] text-gray-600'>{metric.value}</div>
               </div>
-              <div className='flex items-center mb-2'>
-                <IdCard className='w-2 h-2 sm:w-6 sm:h-6 text-blue-600 mr-2' />
-                <h3 className='text-xs sm:text-sm text-slate-600'>{student.id}</h3>
-              </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
-    </motion.header>
+
+      {/* Right Column */}
+      <div className='w-1/4 flex flex-col justify-between border-l border-blue-200 pl-6'>
+        <div>
+          <div className='flex items-center mb-4'>
+            <GraduationCap className='w-8 h-8 text-blue-600 mr-2' />
+            <h3 className='text-[32px] font-semibold text-blue-800'>Supervisor</h3>
+          </div>
+          <div className='bg-white rounded-lg p-3 shadow-sm'>
+            <div className='text-[24px] font-medium text-blue-700'>Dr. Nafisa Noor</div>
+            <div className='text-[20px] text-gray-600'>[NaNr]</div>
+            <div className='text-[20px] text-gray-600'>Assistant Professor</div>
+          </div>
+        </div>
+        <div>
+          <div className='flex items-center mb-4'>
+            <Users className='w-8 h-8 text-blue-600 mr-2' />
+            <h3 className='text-[32px] font-semibold text-blue-800'>Team Members</h3>
+          </div>
+          <div className='grid grid-cols-2 gap-4'>
+            {students.map((student, index) => (
+              <div key={index} className='bg-white rounded-lg p-3 shadow-sm'>
+                <div className='text-[20px] font-medium text-blue-700'>{student.name}</div>
+                <div className='text-[18px] text-gray-600'>{student.id}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
