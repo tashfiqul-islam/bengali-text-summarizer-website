@@ -1,31 +1,45 @@
+import React from 'react'
 import Image from 'next/image'
 
-export function WebsiteUI() {
+interface WebsiteUIProps {
+  theme: 'Light' | 'Dark'
+}
+
+export function WebsiteUI({ theme }: WebsiteUIProps) {
+  const isLightTheme = theme === 'Light'
+
   return (
-    <div className='w-full h-full grid grid-cols-2 gap-6'>
-      <div className='bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col'>
-        <h3 className='text-[32px] font-bold text-gray-800 p-4 text-center'>Light Mode</h3>
-        <div className='relative flex-1'>
-          <Image
-            src='/images/website-light.png'
-            alt='Website Light Mode'
-            layout='fill'
-            objectFit='contain'
-            quality={100}
-          />
-        </div>
+    <div
+      className={`w-full h-full flex flex-col ${
+        isLightTheme ? 'bg-white text-gray-900' : 'bg-gray-900 text-white'
+      } rounded-lg shadow-md overflow-hidden`}
+    >
+      {/* Header */}
+      <div className='mb-4 p-6'>
+        <h2 className='text-[48px] font-bold'>{theme} Mode</h2>
+        <div
+          className={`h-1 w-32 rounded-full ${
+            isLightTheme
+              ? 'bg-gradient-to-r from-blue-500 to-purple-500'
+              : 'bg-gradient-to-r from-blue-500 to-purple-500'
+          }`}
+        ></div>
       </div>
-      <div className='bg-gray-900 rounded-xl shadow-2xl overflow-hidden flex flex-col'>
-        <h3 className='text-[32px] font-bold text-white p-4 text-center'>Dark Mode</h3>
-        <div className='relative flex-1'>
-          <Image
-            src='/images/website-dark.png'
-            alt='Website Dark Mode'
-            layout='fill'
-            objectFit='contain'
-            quality={100}
-          />
-        </div>
+
+      {/* Image Content */}
+      <div className='relative flex-1'>
+        <Image
+          src={isLightTheme ? '/images/website-light.png' : '/images/website-dark.png'}
+          alt={`${theme} Mode Preview`}
+          fill // Ensures the image scales responsively to the container
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw' // Optimized scaling for print and web
+          style={{
+            objectFit: 'contain',
+            borderRadius: '12px',
+          }}
+          quality={100} // Uncompressed for print
+          priority // Ensures these key images are loaded first
+        />
       </div>
     </div>
   )
