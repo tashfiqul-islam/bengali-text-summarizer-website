@@ -13,12 +13,11 @@ export function SystemArchitecture() {
       <div className='relative w-full h-[calc(100%-70px)] rounded-lg overflow-hidden'>
         <div className='absolute inset-0 bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 rounded-lg'>
           <Image
-            src='/sys-arch.png'
+            src='/sys-arch-diagram.png'
             alt='System Architecture Diagram'
             fill
             quality={100} // Ensures the highest image quality
             priority // Preloads the image for better performance
-            style={{ objectFit: 'contain' }} // Modern approach for object fit
             className='rounded-lg'
           />
         </div>

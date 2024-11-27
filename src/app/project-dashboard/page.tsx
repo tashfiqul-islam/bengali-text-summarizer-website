@@ -12,6 +12,7 @@ import { Coverage } from '@/components/dashboard-contents/Coverage'
 import { BERTScore } from '@/components/dashboard-contents/BERTScore'
 import { QRCodeWebsite } from '@/components/dashboard-contents/QRCodeWebsite'
 import { QRCodeGithub } from '@/components/dashboard-contents/QRCodeGithub'
+import { ProjectTimeline } from '@/components/dashboard-contents/ProjectTimeline'
 
 export default function PosterLayout() {
   return (
@@ -38,16 +39,30 @@ export default function PosterLayout() {
       </div>
 
       {/* System Structure - 320mm height */}
-      <div className='w-[833mm] h-[320mm] grid grid-cols-4 grid-rows-2 gap-4'>
-        <div className='col-span-3 row-span-2 bg-white rounded-lg shadow-md overflow-hidden'>
-          <SystemArchitecture />
+      <div className='w-[833mm] h-[320mm] grid grid-cols-10 gap-4'>
+        {/* Left side: 70% width */}
+        <div className='col-span-7 grid grid-rows-10 gap-4'>
+          {/* Project Timeline (30% height) */}
+          <div className='row-span-3 bg-white rounded-lg shadow-md overflow-hidden'>
+            <ProjectTimeline />
+          </div>
+          {/* System Architecture (70% height) */}
+          <div className='row-span-7 bg-white rounded-lg shadow-md overflow-hidden'>
+            <SystemArchitecture />
+          </div>
         </div>
-        <Card className='row-span-1 bg-white/70 backdrop-blur-sm border-white/20 p-4 flex items-center justify-center rounded-lg shadow-md'>
-          <TechStack />
-        </Card>
-        <Card className='row-span-1 bg-white/70 backdrop-blur-sm border-white/20 p-4 flex items-center justify-center rounded-lg shadow-md'>
-          <TrainingLoss />
-        </Card>
+
+        {/* Right side: 30% width */}
+        <div className='col-span-3 grid grid-rows-2 gap-4'>
+          {/* Tech Stack (50% height) */}
+          <Card className='row-span-1 bg-white/70 backdrop-blur-sm border-white/20 p-4 flex items-center justify-center rounded-lg shadow-md'>
+            <TechStack />
+          </Card>
+          {/* Training Loss (50% height) */}
+          <Card className='row-span-1 bg-white/70 backdrop-blur-sm border-white/20 p-4 flex items-center justify-center rounded-lg shadow-md'>
+            <TrainingLoss />
+          </Card>
+        </div>
       </div>
 
       {/* Metrics - 180mm height */}

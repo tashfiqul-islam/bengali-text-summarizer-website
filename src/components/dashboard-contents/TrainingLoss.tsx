@@ -23,7 +23,7 @@ export function TrainingLoss() {
         <div className='h-1 w-32 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full'></div>
       </div>
       <div className='flex-1'>
-        <p className='text-lg text-gray-600 mb-6'>
+        <p className='text-[24px] text-gray-600 mb-6'>
           This table presents a comprehensive overview of our model's training progress, showcasing
           the evolution of loss across multiple rounds with varying epochs and data sizes.
         </p>
@@ -31,25 +31,27 @@ export function TrainingLoss() {
           <Table>
             <TableHeader>
               <TableRow className='bg-gradient-to-r from-blue-50 to-purple-50'>
-                <TableHead className='text-xl font-bold text-gray-900 py-4'>Round</TableHead>
-                <TableHead className='text-xl font-bold text-gray-900 py-4'>Loss</TableHead>
-                <TableHead className='text-xl font-bold text-gray-900 py-4'>Epochs</TableHead>
-                <TableHead className='text-xl font-bold text-gray-900 py-4'>Model</TableHead>
-                <TableHead className='text-xl font-bold text-gray-900 py-4'>Data Size</TableHead>
+                <TableHead className='text-[22px] font-bold text-gray-900 py-4'>Round</TableHead>
+                <TableHead className='text-[22px] font-bold text-gray-900 py-4'>Loss</TableHead>
+                <TableHead className='text-[22px] font-bold text-gray-900 py-4'>Epochs</TableHead>
+                <TableHead className='text-[22px] font-bold text-gray-900 py-4'>Model</TableHead>
+                <TableHead className='text-[22px] font-bold text-gray-900 py-4'>
+                  Data Size
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {trainingLossData.map((row, index) => (
                 <TableRow key={row.round} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <TableCell className='text-lg font-medium text-gray-900 py-4'>
+                  <TableCell className='text-[22px] font-medium text-gray-900 py-4'>
                     {row.round}
                   </TableCell>
-                  <TableCell className='text-lg text-gray-700 py-4'>
+                  <TableCell className='text-[22px] text-gray-700 py-4'>
                     {row.loss.toFixed(4)}
                   </TableCell>
-                  <TableCell className='text-lg text-gray-700 py-4'>{row.epochs}</TableCell>
-                  <TableCell className='text-lg text-gray-700 py-4'>{row.model}</TableCell>
-                  <TableCell className='text-lg text-gray-700 py-4'>{row.dataSize}</TableCell>
+                  <TableCell className='text-[2px] text-gray-700 py-4'>{row.epochs}</TableCell>
+                  <TableCell className='text-[22px] text-gray-700 py-4'>{row.model}</TableCell>
+                  <TableCell className='text-[22px] text-gray-700 py-4'>{row.dataSize}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
