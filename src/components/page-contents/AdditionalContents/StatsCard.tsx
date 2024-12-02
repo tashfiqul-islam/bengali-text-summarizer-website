@@ -12,9 +12,9 @@ interface StatCard {
 
 // Stat cards configuration
 const statsCards: StatCard[] = [
-  { title: "Training Loss", value: "0.99", change: -18.34 },
-  { title: "Validation Loss", value: "0.67", change: -15.21 },
-  { title: "Accuracy", value: "92.50", change: 7.89 }
+  { title: 'Training Loss', value: '0.99', change: -18.34 },
+  { title: 'Validation Loss', value: '0.67', change: -15.21 },
+  { title: 'Accuracy', value: '73.24%', change: 7.89 },
 ]
 
 interface StatCardProps {
