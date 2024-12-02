@@ -9,33 +9,33 @@ import { Button } from '@/components/ui/button'
 
 // Define tech stacks with categorization
 const modelTechStack = [
-  { name: 'Python', version: '3.9', icon: '/images/logos/python.png', category: 'Language' },
-  { name: 'PyTorch', version: '1.10', icon: '/images/logos/pytorch.png', category: 'ML Framework' },
-  { name: 'Numpy', version: '1.21', icon: '/images/logos/numpy.png', category: 'Data Processing' },
-  { name: 'Pandas', version: '1.3', icon: '/images/logos/pandas.png', category: 'Data Processing' },
+  { name: 'Python', version: '3.9', icon: '/images/logos/python.svg', category: 'Language' },
+  { name: 'PyTorch', version: '1.10', icon: '/images/logos/pytorch.svg', category: 'ML Framework' },
+  { name: 'Numpy', version: '1.21', icon: '/images/logos/numpy.svg', category: 'Data Processing' },
+  { name: 'Pandas', version: '1.3', icon: '/images/logos/pandas.svg', category: 'Data Processing' },
   {
     name: 'Hugging Face',
     version: '4.12',
-    icon: '/images/logos/huggingface.png',
+    icon: '/images/logos/hf.svg',
     category: 'ML Tools',
   },
 ]
 
 const websiteTechStack = [
-  { name: 'Next.js', version: '15.0.2', icon: '/images/logos/nextjs.png', category: 'Framework' },
-  { name: 'React', version: '19.0.0-rc', icon: '/images/logos/react.png', category: 'Library' },
+  { name: 'Next.js', version: '15.0.2', icon: '/images/logos/nextjs.svg', category: 'Framework' },
+  { name: 'React', version: '19.0.0-rc', icon: '/images/logos/react.svg', category: 'Library' },
   {
     name: 'Tailwind CSS',
     version: '3.4.1',
-    icon: '/images/logos/tailwindcss.png',
+    icon: '/images/logos/tailwindcss.svg',
     category: 'Styling',
   },
-  { name: 'TypeScript', version: '5', icon: '/images/logos/typescript.png', category: 'Language' },
-  { name: 'ESLint', version: '8', icon: '/images/logos/eslint.png', category: 'Linting' },
+  { name: 'TypeScript', version: '5', icon: '/images/logos/typescript.svg', category: 'Language' },
+  { name: 'ESLint', version: '8', icon: '/images/logos/eslint-icon.svg', category: 'Linting' },
   {
     name: 'shadcn/ui',
     version: 'latest',
-    icon: '/images/logos/shadcn.png',
+    icon: '/images/logos/shadcn-ui.svg',
     category: 'UI Components',
   },
 ]

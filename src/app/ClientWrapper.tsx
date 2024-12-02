@@ -13,7 +13,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
   const isProjectDashboard = pathname === '/project-dashboard'
 
   return (
-    <ThemeProvider defaultTheme='system'>
+    <ThemeProvider defaultTheme='light'>
       <div className='min-h-screen flex flex-col'>
         <header className='sticky top-0 z-50'>
           <NavigationBar />
