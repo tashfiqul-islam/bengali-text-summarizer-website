@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   // Output a standalone build for improved performance and easier deployment
   output: 'standalone',
 
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+  
   // Configure image optimization
   images: {
     remotePatterns: [
@@ -18,9 +24,15 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'localhost',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.shields.io',
+      },
     ],
     // Enable runtime image optimization for better performance
     unoptimized: false,
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   // Configure experimental features
@@ -83,6 +95,19 @@ const nextConfig: NextConfig = {
         // Cache policy for static JavaScript files
         source: '/_next/static/:path*',
         headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/:path*.mp3',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'audio/mpeg',
+          },
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',

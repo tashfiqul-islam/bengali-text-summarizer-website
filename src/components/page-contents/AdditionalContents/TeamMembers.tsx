@@ -80,7 +80,6 @@ export default function TeamMembers() {
           </div>
         </div>
       </div>
-
       {/* Team Members Grid */}
       <div className='grid grid-cols-2 gap-2'>
         {teamMembers.map(member => (
@@ -93,7 +92,9 @@ export default function TeamMembers() {
                 <Image
                   src={member.image}
                   alt={member.name}
+                  priority
                   fill
+                  sizes='100vw'
                   className='rounded-full object-cover'
                 />
               </div>

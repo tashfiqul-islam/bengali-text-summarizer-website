@@ -1,5 +1,22 @@
 import { NewspaperIcon, BookOpen, Library, Newspaper } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import {
+  Search,
+  Database as ProjectStepsDatabase,
+  Brain as ProjectStepsBrain,
+  Rocket,
+  Globe as ProjectStepsGlobe,
+  Brain as tableOfContentsBrain,
+  LayoutDashboard,
+  Shapes,
+  LineChart,
+  BarChart3,
+  PieChartIcon,
+  Code2,
+  Server,
+  Globe as tableOfContentsGlobe,
+  Database as tableOfContentsDatabase,
+} from 'lucide-react'
 
 /**
  * Represents an article with a title and content.
@@ -8,6 +25,37 @@ export interface Article {
   title: string
   content: string
 }
+
+export const minChars = 200
+export const maxChars = 5000
+
+export const funPhrases = [
+  '🧙‍♂️ Accio Summary! Your Words, Summoned',
+  '✨ Wingardium Levi-summary! Floating Knowledge Ahead',
+  '🦉 Owl Post! Your Summary Has Arrived',
+  "🔮 Divination Complete! Here's Your Crystal-Clear Insight",
+  '📜 Mischief Managed! Article Shortened with Style',
+  '🎩 Expecto Knowledge! Your Summary Has Appeared',
+  '💫 Reducio! Your Text, Magically Minimized',
+  '🌌 Lumos! Shedding Light on the Essence',
+  '🧹 Just Like a Quidditch Match – Swift and Precise!',
+  "⚡️ Stupefy! Here's a Stunning Summary",
+  '✨ Expelliarmus! Fluff Banished, Only Key Points Remain',
+  '🎇 Protego! Shielded from Unnecessary Details',
+  "🦄 Felix Felicis! You've Got a Potent Dose of Clarity",
+  "✨ Reparo! We've Pieced Together the Best Bits",
+  '🧪 Polyjuice Potion Applied – Original, Now Transformed',
+  '🔮 Riddikulus! No More Confusion, Just Pure Insight',
+  '💡 Lumos Maxima! Illuminating the Core of Your Article',
+  '⚡️ Dobby Delivered! A Free Summary, Just for You',
+  '📚 The Pensieve Effect! Only the Best Memories Remain',
+  '🦉 Hedwig Approved! Your Summary is Here',
+  '✨ Conjured with Care: Your Magical Summary',
+  '🍫 Like a Chocolate Frog – Sweet and Brief!',
+  "⚡️ Alohomora! We've Unlocked the Essence",
+  '🎩 Just Like a Quick Trip to Diagon Alley!',
+  '✨ Petrificus Totalus! The Key Points, Frozen in Time',
+]
 
 /**
  * Represents a category with a name, icon, and list of articles.
@@ -107,4 +155,206 @@ export const categories: Category[] = [
       },
     ],
   },
+]
+
+export const bleuMeteorData = [
+  { set: 'Training', BLEU: 0.018, METEOR: 0.074 },
+  { set: 'Validation', BLEU: 0.022, METEOR: 0.079 },
+  { set: 'Test', BLEU: 0.022, METEOR: 0.08 },
+]
+
+export const coverageData = [
+  { name: 'Content Covered', value: 54.1 },
+  { name: 'Remaining', value: 45.9 },
+]
+
+export const bertScoreData = [
+  { metric: 'Precision', value: 0.7757 },
+  { metric: 'Recall', value: 0.7915 },
+  { metric: 'F1', value: 0.7819 },
+]
+
+export const trainingLossData = [
+  { round: 1, loss: 6.9987, epochs: 3, model: 'v3', dataSize: '10k' },
+  { round: 2, loss: 2.2538, epochs: 3, model: 'v3', dataSize: '10k' },
+  { round: 3, loss: 1.0143, epochs: 5, model: 'v3', dataSize: '10k' },
+  { round: 4, loss: 2.5004, epochs: 100, model: 'v4', dataSize: '20k' },
+]
+
+export const challenges = [
+  { icon: '📰', text: 'Overwhelming volume of articles' },
+  { icon: '⏳', text: 'Time-consuming to read through' },
+  { icon: '🔍', text: 'Difficulty in finding key information' },
+  { icon: '📚', text: 'Need for concise summaries' },
+]
+
+export const projectSteps = [
+  {
+    icon: Search,
+    title: 'Web Crawler',
+    description: 'Initially developed to fetch articles from various Bengali newspaper portals.',
+  },
+  {
+    icon: ProjectStepsDatabase,
+    title: 'Data Collection',
+    description: 'Gathered articles and summaries from multiple sources.',
+  },
+  {
+    icon: ProjectStepsBrain,
+    title: 'Model Training',
+    description: 'Utilized a pre-trained model (google/mt5-small) with a Seq2Seq architecture.',
+  },
+  {
+    icon: Rocket,
+    title: 'Model Deploy',
+    description: 'Deployed in Hugging Face and used HF Inference API to connect with the web.',
+  },
+  {
+    icon: ProjectStepsGlobe,
+    title: 'Web Interface',
+    description:
+      'Built using Next.js 15 and React 19 for a responsive and user-friendly experience.',
+  },
+]
+
+export const techStack = [
+  {
+    category: 'Model Technologies',
+    items: [
+      {
+        name: 'Python',
+        badge:
+          'https://img.shields.io/badge/-Python-3776AB?style=for-the-badge&logo=python&logoColor=white',
+      },
+      {
+        name: 'PyTorch',
+        badge:
+          'https://img.shields.io/badge/-PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white',
+      },
+      {
+        name: 'Transformers',
+        badge:
+          'https://img.shields.io/badge/-HuggingFace-FDEE21?style=for-the-badge&logo=HuggingFace&logoColor=black',
+      },
+      {
+        name: 'SacreBLEU',
+        badge: 'https://img.shields.io/badge/-SacreBLEU-FFA500?style=for-the-badge',
+      },
+      {
+        name: 'BERTScore',
+        badge: 'https://img.shields.io/badge/-BERTScore-FF5733?style=for-the-badge',
+      },
+      {
+        name: 'Spacy',
+        badge:
+          'https://img.shields.io/badge/-Spacy-09A3D5?style=for-the-badge&logo=spacy&logoColor=white',
+      },
+      {
+        name: 'NLTK',
+        badge:
+          'https://img.shields.io/badge/-NLTK-3C873A?style=for-the-badge&logo=nltk&logoColor=white',
+      },
+      {
+        name: 'Syllapy',
+        badge: 'https://img.shields.io/badge/-Syllapy-4A90E2?style=for-the-badge',
+      },
+      {
+        name: 'Sentence Transformers',
+        badge: 'https://img.shields.io/badge/-SentenceTransformers-008080?style=for-the-badge',
+      },
+      {
+        name: 'Matplotlib',
+        badge:
+          'https://img.shields.io/badge/-Matplotlib-007ACC?style=for-the-badge&logo=matplotlib&logoColor=white',
+      },
+      {
+        name: 'Seq2Seq Trainer',
+        badge:
+          'https://img.shields.io/badge/-Seq2SeqTrainer-FF9900?style=for-the-badge&logo=huggingface&logoColor=white',
+      },
+    ],
+  },
+  {
+    category: 'Website Technologies',
+    items: [
+      {
+        name: 'Next.js',
+        badge:
+          'https://img.shields.io/badge/-Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white',
+      },
+      {
+        name: 'React',
+        badge:
+          'https://img.shields.io/badge/-React-61DAFB?style=for-the-badge&logo=react&logoColor=black',
+      },
+      {
+        name: 'Tailwind CSS',
+        badge:
+          'https://img.shields.io/badge/-TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white',
+      },
+      {
+        name: 'TypeScript',
+        badge:
+          'https://img.shields.io/badge/-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white',
+      },
+      {
+        name: 'ESLint',
+        badge:
+          'https://img.shields.io/badge/-ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white',
+      },
+      {
+        name: 'shadcn/ui',
+        badge:
+          'https://img.shields.io/badge/-shadcn/ui-000000?style=for-the-badge&logo=vercel&logoColor=white',
+      },
+      {
+        name: 'Recharts',
+        badge:
+          'https://img.shields.io/badge/-Recharts-FF4500?style=for-the-badge&logo=data:image/svg+xml;base64,...', // Add logo or use blank
+      },
+      {
+        name: 'Zod',
+        badge:
+          'https://img.shields.io/badge/-Zod-7A49B3?style=for-the-badge&logo=javascript&logoColor=white',
+      },
+      {
+        name: 'Framer Motion',
+        badge:
+          'https://img.shields.io/badge/-FramerMotion-0055FF?style=for-the-badge&logo=framer&logoColor=white',
+      },
+      {
+        name: 'Lucide',
+        badge:
+          'https://img.shields.io/badge/-Lucide-F28D00?style=for-the-badge&logo=lucide&logoColor=white',
+      },
+    ],
+  },
+]
+
+export const students = [
+  { name: 'Md Tashfiqul Islam', id: '161 1593 042' },
+  { name: 'Tashin Mahmud Khan', id: '201 1819 042' },
+  { name: 'Amir Hamja Marjan', id: '202 1171 642' },
+  { name: 'Md Simul Hossain', id: '171 1949 642' },
+]
+
+export const tableOfContents = [
+  { title: 'Problem Statement', icon: tableOfContentsBrain, number: '01' },
+  { title: 'Project Overview', icon: LayoutDashboard, number: '02' },
+  { title: 'Key Features', icon: Shapes, number: '03' },
+  {
+    title: 'Model Performance',
+    icon: LineChart,
+    number: '04',
+    subitems: [
+      { title: 'BLEU & METEOR Scores', icon: BarChart3, number: '4.1' },
+      { title: 'Content Coverage', icon: PieChartIcon, number: '4.2' },
+      { title: 'BERT Score', icon: BarChart3, number: '4.3' },
+      { title: 'Training Details', icon: tableOfContentsDatabase, number: '4.4' },
+      { title: 'Training Loss', icon: LineChart, number: '4.5' },
+    ],
+  },
+  { title: 'Tech Stack', icon: Code2, number: '05' },
+  { title: 'System Architecture', icon: Server, number: '06' },
+  { title: 'Website UI', icon: tableOfContentsGlobe, number: '07' },
 ]
