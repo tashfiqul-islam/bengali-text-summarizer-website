@@ -2,7 +2,6 @@
 
 import { Card } from '@/components/ui/card'
 import { motion } from 'framer-motion'
-import { Code2, Database, Brain, FlaskConical, Layout, Link, Rocket } from 'lucide-react'
 
 export function ProjectOverview() {
   return (

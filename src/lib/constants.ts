@@ -2,7 +2,6 @@ import { NewspaperIcon, BookOpen, Library, Newspaper } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import {
   Search,
-  ScrollText,
   Database as ProjectStepsDatabase,
   Brain as ProjectStepsBrain,
   Rocket,
@@ -17,10 +16,6 @@ import {
   Server,
   Globe as tableOfContentsGlobe,
   Database as tableOfContentsDatabase,
-  Text,
-  NotebookPen,
-  MonitorSmartphone,
-  SunMoon,
 } from 'lucide-react'
 
 /**
